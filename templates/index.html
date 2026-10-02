@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Assistente de Leilões</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f3f4f6;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: #111827;
+            color: white;
+            padding: 22px;
+        }
+
+        .chat-header h1 {
+            font-size: 21px;
+            margin-bottom: 5px;
+        }
+
+        .chat-header p {
+            color: #d1d5db;
+            font-size: 14px;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #f9fafb;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 13px 17px;
+            border-radius: 14px;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .bot {
+            align-self: flex-start;
+            background: white;
+            color: #1f2937;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 4px;
+        }
+
+        .user {
+            align-self: flex-end;
+            background: #2563eb;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 18px;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex: 1;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            padding: 13px 15px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .input-area input:focus {
+            border-color: #2563eb;
+        }
+
+        .input-area button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 0 24px;
+            border-radius: 10px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .input-area button:hover {
+            background: #1d4ed8;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                align-items: stretch;
+            }
+
+            .chat-container {
+                height: 100vh;
+                border-radius: 0;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="chat-container">
+
+        <div class="chat-header">
+
+            <h1>Assistente de Leilões</h1>
+
+            <p>
+                Tire suas dúvidas sobre leilões, lotes,
+                lances, pagamentos e arrematação.
+            </p>
+
+        </div>
+
+
+        <div
+            class="messages"
+            id="messages"
+        >
+
+            <div class="message bot">
+
+                Olá! 👋
+
+                <br><br>
+
+                Sou o assistente virtual de leilões.
+                Como posso ajudar?
+
+            </div>
+
+        </div>
+
+
+        <div class="input-area">
+
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Digite sua pergunta..."
+                autocomplete="off"
+            >
+
+            <button onclick="enviarMensagem()">
+                Enviar
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const input = document.getElementById("messageInput");
+
+        const messages = document.getElementById("messages");
+
+
+        // ==========================================
+        // ADICIONAR MENSAGEM NA TELA
+        // ==========================================
+
+        function adicionarMensagem(texto, tipo) {
+
+            const div = document.createElement("div");
+
+            div.classList.add(
+                "message",
+                tipo
+            );
+
+            div.innerText = texto;
+
+            messages.appendChild(div);
+
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+
+        // ==========================================
+        // ENVIAR MENSAGEM
+        // ==========================================
+
+        async function enviarMensagem() {
+
+            const mensagem = input.value.trim();
+
+            if (!mensagem) {
+                return;
+            }
+
+
+            // Mostra mensagem do usuário
+
+            adicionarMensagem(
+                mensagem,
+                "user"
+            );
+
+
+            // Limpa campo
+
+            input.value = "";
+
+
+            try {
+
+                const resposta = await fetch(
+                    "/chat",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            mensagem: mensagem
+                        })
+                    }
+                );
+
+
+                const dados = await resposta.json();
+
+
+                adicionarMensagem(
+                    dados.resposta,
+                    "bot"
+                );
+
+
+            } catch (erro) {
+
+                adicionarMensagem(
+                    "Ocorreu um erro ao entrar em contato com o chatbot.",
+                    "bot"
+                );
+
+                console.error(erro);
+
+            }
+
+        }
+
+
+        // ==========================================
+        // ENTER PARA ENVIAR
+        // ==========================================
+
+        input.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.key === "Enter") {
+
+                    enviarMensagem();
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
