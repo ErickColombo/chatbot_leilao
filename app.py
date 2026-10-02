@@ -2,6 +2,7 @@ import os
 import re
 import unicodedata
 import joblib
+import json
 
 from flask import Flask, request, jsonify, render_template
 
@@ -65,6 +66,31 @@ app = Flask(
     static_folder=os.path.join(BASE_DIR, "static")
 )
 
+
+
+#rotas
+
+@app.route("/admin", methods=["GET"])
+def admin():
+    # Renderiza a interface que criaremos no passo 2
+    return render_template("admin.html")
+
+@app.route("/api/faq", methods=["GET", "POST"])
+def gerenciar_faq():
+    # O caminho do FAQ já está definido no seu arquivo como FAQ_PATH
+    if request.method == "POST":
+        novos_dados = request.get_json()
+        
+        with open(FAQ_PATH, "w", encoding="utf-8") as f:
+            # ensure_ascii=False garante que os acentos (ã, é) sejam salvos corretamente
+            json.dump(novos_dados, f, indent=2, ensure_ascii=False)
+            
+        return jsonify({"status": "sucesso", "mensagem": "FAQ atualizado com sucesso!"})
+
+    # Se for GET, apenas retorna o JSON atual
+    with open(FAQ_PATH, "r", encoding="utf-8") as f:
+        dados_faq = json.load(f)
+        return jsonify(dados_faq)
 
 # ============================================================
 # VARIÁVEIS GLOBAIS
