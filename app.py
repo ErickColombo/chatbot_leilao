@@ -1,146 +1,355 @@
-from flask import Flask, render_template, request, jsonify
-
+import os
+import re
+import unicodedata
 import joblib
 
-from pathlib import Path
+from flask import Flask, request, jsonify, render_template
 
 
 # ============================================================
-# CONFIGURAÇÃO
+# CONFIGURAÇÕES
 # ============================================================
 
-app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "models",
+    "modelo.pkl"
+)
 
-BASE_DIR = Path(__file__).resolve().parent
+FAQ_PATH = os.path.join(
+    BASE_DIR,
+    "data",
+    "faq.json"
+)
 
-MODEL_PATH = BASE_DIR / "models" / "modelo.pkl"
+# ------------------------------------------------------------
+# SEGURANÇA DA CLASSIFICAÇÃO
+# ------------------------------------------------------------
 
-
-# ============================================================
-# CONFIGURAÇÕES DO CHATBOT
-# ============================================================
-
-# Se True, o chatbot evita responder quando não estiver seguro.
-MODO_SEGURO = True
-
-
-# Quanto maior esse valor, mais facilmente duas intents
-# serão consideradas ambíguas.
+# Score mínimo absoluto.
 #
-# Como queremos um comportamento conservador,
-# deixamos uma margem relativamente alta.
-MARGEM_AMBIGUIDADE = 0.25
+# Se o melhor score ficar abaixo disso, o chatbot considera
+# que não existe confiança suficiente para responder.
+#
+# Como estamos usando LinearSVC, esse valor não representa
+# exatamente uma probabilidade.
+#
+# Começamos com um valor conservador.
+SCORE_MINIMO = 0.10
 
 
-# Diferença mínima entre as duas melhores intenções
-# para considerar que uma delas está claramente na frente.
+# Diferença mínima entre o primeiro e o segundo resultado.
 #
 # Exemplo:
 #
-# intent A = 1.20
-# intent B = 0.50
+# Intent A = 0.50
+# Intent B = 0.48
 #
-# diferença = 0.70
+# Margem = 0.02
 #
-# Neste caso, provavelmente não há ambiguidade.
+# Nesse caso o chatbot NÃO escolhe A.
 #
-# Já:
-#
-# intent A = 0.85
-# intent B = 0.72
-#
-# diferença = 0.13
-#
-# Neste caso, podemos pedir esclarecimento.
-MARGEM_CLAREZA = 0.25
+# Ele pede esclarecimento.
+MARGEM_MINIMA = 0.25
+
+
+# Se não existir segundo resultado, podemos aceitar o primeiro
+# caso o score seja suficiente.
+MARGEM_SEM_SEGUNDO = 999
 
 
 # ============================================================
-# FALLBACK
+# FLASK
 # ============================================================
 
-RESPOSTA_FALLBACK = (
-    "Não consegui identificar com segurança o que você deseja saber. "
-    "Posso ajudar com dúvidas sobre lances, lotes, arrematação, "
-    "pagamentos, visitação, entrega dos bens e outros assuntos "
-    "relacionados aos leilões."
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "static")
 )
+
+
+# ============================================================
+# VARIÁVEIS GLOBAIS
+# ============================================================
+
+modelo = None
+faq = None
+
+# Índice:
+#
+# {
+#     "pergunta normalizada": "intent"
+# }
+indice_perguntas = {}
+
+# Respostas:
+#
+# {
+#     "intent": "resposta"
+# }
+respostas = {}
+
+# Desambiguações:
+#
+# lista carregada do JSON
+desambiguacoes = []
+
+# Guarda a última desambiguação.
+#
+# Para um projeto simples podemos manter globalmente.
+#
+# Exemplo:
+#
+# {
+#     "intents": [
+#         "visitar_bem",
+#         "entrega_bem"
+#     ],
+#     "opcoes": [...]
+# }
+ultima_desambiguacao = None
+
+
+# ============================================================
+# NORMALIZAÇÃO
+# ============================================================
+
+def normalizar(texto):
+    """
+    Normaliza uma pergunta para facilitar comparação.
+
+    Exemplos:
+
+        "Olá!"
+        -> "ola"
+
+        "Onde mudo minha senha?"
+        -> "onde mudo minha senha"
+
+        "Como faço para dar LANCE?"
+        -> "como faco para dar lance"
+    """
+
+    if texto is None:
+        return ""
+
+    texto = str(texto).strip().lower()
+
+    # Remove acentos
+    texto = unicodedata.normalize(
+        "NFD",
+        texto
+    )
+
+    texto = "".join(
+        caractere
+        for caractere in texto
+        if unicodedata.category(caractere) != "Mn"
+    )
+
+    # Remove pontuação
+    texto = re.sub(
+        r"[^\w\s]",
+        " ",
+        texto,
+        flags=re.UNICODE
+    )
+
+    # Remove espaços duplicados
+    texto = re.sub(
+        r"\s+",
+        " ",
+        texto
+    ).strip()
+
+    return texto
+
+
+# ============================================================
+# CARREGAR FAQ
+# ============================================================
+
+from pathlib import Path
+import json
+
+BASE_DIR = Path(__file__).resolve().parent
+FAQ_PATH = BASE_DIR / "data" / "faq.json"
+
+print("=" * 60)
+print("CAMINHO DO APP:", BASE_DIR)
+print("CAMINHO DO FAQ:", FAQ_PATH)
+print("FAQ EXISTE?:", FAQ_PATH.exists())
+print("=" * 60)
+
+if not FAQ_PATH.exists():
+    raise FileNotFoundError(
+        f"FAQ não encontrado:\n{FAQ_PATH}"
+    )
+
+with open(FAQ_PATH, "r", encoding="utf-8") as f:
+    faq_data = json.load(f)
+
+
+
+# ============================================================
+# PREPARAR FAQ
+# ============================================================
+
+def preparar_faq(dados):
+    """
+    Prepara:
+
+    - índice de perguntas
+    - respostas
+    - desambiguações
+    """
+
+    global indice_perguntas
+    global respostas
+    global desambiguacoes
+
+    indice_perguntas = {}
+    respostas = {}
+    desambiguacoes = []
+
+    intents = dados.get(
+        "intents",
+        []
+    )
+
+    desambiguacoes = dados.get(
+        "desambiguacoes",
+        []
+    )
+
+    for item in intents:
+
+        intent = item.get(
+            "intent"
+        )
+
+        resposta = item.get(
+            "resposta",
+            ""
+        )
+
+        if not intent:
+            continue
+
+        respostas[intent] = resposta
+
+        perguntas = item.get(
+            "perguntas",
+            []
+        )
+
+        for pergunta in perguntas:
+
+            pergunta_normalizada = normalizar(
+                pergunta
+            )
+
+            if not pergunta_normalizada:
+                continue
+
+            indice_perguntas[
+                pergunta_normalizada
+            ] = intent
 
 
 # ============================================================
 # CARREGAR MODELO
 # ============================================================
 
-print("=" * 60)
-print("CHATBOT DE LEILÕES")
-print("=" * 60)
+def carregar_modelo():
 
-print("\nCarregando modelo...")
+    global modelo
 
-if not MODEL_PATH.exists():
+    if not os.path.exists(MODEL_PATH):
 
-    print("\nERRO: modelo.pkl não encontrado.")
+        raise FileNotFoundError(
+            f"""
+Modelo não encontrado.
 
-    print(
-        "\nExecute primeiro:"
+Esperado em:
+
+{MODEL_PATH}
+
+Execute primeiro:
+
+python src/train.py
+"""
+        )
+
+    print()
+    print("=" * 60)
+    print("CARREGANDO MODELO")
+    print("=" * 60)
+
+    modelo = joblib.load(
+        MODEL_PATH
+    )
+
+    print("Modelo carregado com sucesso.")
+
+
+# ============================================================
+# CARREGAMENTO INICIAL
+# ============================================================
+
+def inicializar():
+
+    global faq
+
+    print()
+    print("=" * 60)
+    print("CHATBOT DE LEILÕES")
+    print("=" * 60)
+
+    print()
+    print("Carregando FAQ...")
+
+    faq = faq_data ()
+
+    preparar_faq(
+        faq
     )
 
     print(
-        "python src/train.py"
+        f"Intents: {len(respostas)}"
     )
 
-    raise SystemExit(1)
+    print(
+        f"Perguntas exatas: {len(indice_perguntas)}"
+    )
 
+    print(
+        f"Desambiguações: {len(desambiguacoes)}"
+    )
 
-dados_modelo = joblib.load(
-    MODEL_PATH
-)
-
-
-modelo = dados_modelo["modelo"]
-
-respostas = dados_modelo["respostas"]
-
-desambiguacoes = dados_modelo.get(
-    "desambiguacoes",
-    []
-)
-
-
-print("Modelo carregado com sucesso.")
-
-print(
-    f"Intents carregadas: {len(respostas)}"
-)
+    carregar_modelo()
 
 
 # ============================================================
-# SESSÕES
+# MATCH EXATO
 # ============================================================
 
-# Estrutura:
+def procurar_match_exato(pergunta_normalizada):
 
-# sessoes = {
-#
-#     "usuario_123": {
-#
-#         "opcoes": [
-#             {
-#                 "texto": "...",
-#                 "intent": "..."
-#             }
-#         ]
-#
-#     }
-#
-# }
+    if pergunta_normalizada in indice_perguntas:
 
-sessoes = {}
+        return indice_perguntas[
+            pergunta_normalizada
+        ]
+
+    return None
 
 
 # ============================================================
-# ENCONTRAR DESAMBIGUAÇÃO
+# PROCURAR DESAMBIGUAÇÃO
 # ============================================================
 
 def encontrar_desambiguacao(
@@ -148,23 +357,25 @@ def encontrar_desambiguacao(
     intent2
 ):
 
-    conjunto = {
+    if not intent1 or not intent2:
+        return None
+
+    conjunto_procurado = {
         intent1,
         intent2
     }
 
     for item in desambiguacoes:
 
-        intents_item = set(
-            item.get(
-                "intents",
-                []
-            )
+        intents = item.get(
+            "intents",
+            []
         )
 
-        if conjunto.issubset(
-            intents_item
-        ):
+        if len(intents) != 2:
+            continue
+
+        if set(intents) == conjunto_procurado:
 
             return item
 
@@ -172,389 +383,495 @@ def encontrar_desambiguacao(
 
 
 # ============================================================
-# OBTER RANKING DAS INTENTS
+# CLASSIFICAR COM SVM
 # ============================================================
 
-def obter_intents(
-    pergunta
-):
+def classificar(pergunta):
 
-    svm = modelo.named_steps["svm"]
+    """
+    Retorna:
 
-    tfidf = modelo.named_steps["tfidf"]
+    {
+        "intent": "...",
+        "score": 0.50,
+        "segundo_intent": "...",
+        "segundo_score": 0.30,
+        "margem": 0.20
+    }
 
+    ou None.
+    """
 
-    vetor = tfidf.transform(
-        [pergunta]
-    )
+    if modelo is None:
+        return None
 
+    try:
 
-    scores = svm.decision_function(
-        vetor
-    )
+        # A pipeline TF-IDF + SVM recebe uma lista.
+        scores = modelo.decision_function(
+            [pergunta]
+        )
 
+    except Exception as erro:
 
-    classes = svm.classes_
+        print(
+            f"ERRO AO CLASSIFICAR: {erro}"
+        )
 
+        return None
 
-    # --------------------------------------------------------
-    # CLASSIFICAÇÃO BINÁRIA
-    # --------------------------------------------------------
+    # Algumas versões/configurações podem retornar
+    # um array 1D.
+    if len(scores.shape) == 1:
 
-    if len(classes) == 2:
+        scores = scores.reshape(
+            1,
+            -1
+        )
 
-        score = scores[0]
+    scores = scores[0]
 
-        resultados = [
+    # Classes aprendidas pelo LinearSVC
+    classes = modelo.classes_
+
+    resultados = []
+
+    for i, intent in enumerate(classes):
+
+        resultados.append(
             (
-                classes[0],
-                -score
-            ),
-            (
-                classes[1],
-                score
-            )
-        ]
-
-
-    # --------------------------------------------------------
-    # CLASSIFICAÇÃO MULTICLASSE
-    # --------------------------------------------------------
-
-    else:
-
-        scores = scores[0]
-
-        resultados = list(
-            zip(
-                classes,
-                scores
+                intent,
+                float(scores[i])
             )
         )
 
-
     # Maior score primeiro
-
     resultados.sort(
         key=lambda x: x[1],
         reverse=True
     )
 
+    primeiro = resultados[0]
 
-    return resultados
+    if len(resultados) > 1:
 
+        segundo = resultados[1]
 
-# ============================================================
-# VERIFICAR ESCOLHA DO USUÁRIO
-# ============================================================
+    else:
 
-def processar_escolha(
-    pergunta,
-    sessao_id
-):
-
-    sessao = sessoes.get(
-        sessao_id
-    )
-
-
-    if not sessao:
-
-        return None
-
-
-    opcoes = sessao.get(
-        "opcoes"
-    )
-
-
-    if not opcoes:
-
-        return None
-
-
-    escolha = pergunta.strip()
-
-
-    # --------------------------------------------------------
-    # USUÁRIO DIGITOU NÚMERO
-    # --------------------------------------------------------
-
-    if escolha.isdigit():
-
-        numero = int(
-            escolha
+        segundo = (
+            None,
+            0
         )
 
+    intent1 = primeiro[0]
+    score1 = primeiro[1]
 
-        if 1 <= numero <= len(opcoes):
+    intent2 = segundo[0]
+    score2 = segundo[1]
 
-            opcao = opcoes[
-                numero - 1
-            ]
-
-
-            intent = opcao[
-                "intent"
-            ]
-
-
-            # Remove estado da sessão
-
-            sessoes.pop(
-                sessao_id,
-                None
-            )
-
-
-            return {
-                "tipo": "resposta",
-                "intent": intent,
-                "resposta": respostas.get(
-                    intent,
-                    RESPOSTA_FALLBACK
-                )
-            }
-
-
-        return {
-            "tipo": "erro_escolha",
-            "resposta": (
-                "Opção inválida. "
-                "Escolha uma das opções apresentadas."
-            ),
-            "opcoes": opcoes
-        }
-
-
-    # --------------------------------------------------------
-    # USUÁRIO DIGITOU O TEXTO DA OPÇÃO
-    # --------------------------------------------------------
-
-    escolha_normalizada = escolha.lower()
-
-
-    for opcao in opcoes:
-
-        texto_opcao = opcao[
-            "texto"
-        ].lower()
-
-
-        if (
-            escolha_normalizada
-            in texto_opcao
-        ):
-
-            intent = opcao[
-                "intent"
-            ]
-
-
-            sessoes.pop(
-                sessao_id,
-                None
-            )
-
-
-            return {
-                "tipo": "resposta",
-                "intent": intent,
-                "resposta": respostas.get(
-                    intent,
-                    RESPOSTA_FALLBACK
-                )
-            }
-
+    margem = (
+        score1 - score2
+    )
 
     return {
-        "tipo": "erro_escolha",
-        "resposta": (
-            "Não consegui identificar sua escolha. "
-            "Clique em uma das opções ou digite o número correspondente."
+        "intent": intent1,
+        "score": score1,
+        "segundo_intent": intent2,
+        "segundo_score": score2,
+        "margem": margem,
+        "resultados": resultados
+    }
+
+
+# ============================================================
+# FALLBACK
+# ============================================================
+
+def resposta_fallback():
+
+    return (
+        "Não consegui identificar com segurança o que você "
+        "deseja saber. Posso ajudar com dúvidas sobre "
+        "lances, lotes, arrematação, pagamentos, visitação, "
+        "entrega dos bens e outros assuntos relacionados "
+        "aos leilões."
+    )
+
+
+# ============================================================
+# DESAMBIGUAÇÃO
+# ============================================================
+
+def gerar_desambiguacao(
+    item
+):
+
+    global ultima_desambiguacao
+
+    if not item:
+        return None
+
+    pergunta = item.get(
+        "pergunta"
+    )
+
+    opcoes = item.get(
+        "opcoes",
+        []
+    )
+
+    if not pergunta or not opcoes:
+        return None
+
+    ultima_desambiguacao = {
+        "intents": item.get(
+            "intents",
+            []
         ),
         "opcoes": opcoes
     }
+
+    texto = pergunta
+
+    for i, opcao in enumerate(
+        opcoes,
+        start=1
+    ):
+
+        texto += (
+            f"\n{i}. "
+            f"{opcao.get('texto', '')}"
+        )
+
+    return texto
+
+
+# ============================================================
+# PROCESSAR OPÇÃO 1 OU 2
+# ============================================================
+
+def processar_opcao(numero):
+
+    global ultima_desambiguacao
+
+    if not ultima_desambiguacao:
+
+        return None
+
+    opcoes = ultima_desambiguacao.get(
+        "opcoes",
+        []
+    )
+
+    if numero < 1 or numero > len(opcoes):
+
+        return (
+            "Não consegui identificar sua escolha. "
+            "Digite o número da opção desejada."
+        )
+
+    opcao = opcoes[
+        numero - 1
+    ]
+
+    intent = opcao.get(
+        "intent"
+    )
+
+    # Limpa a desambiguação depois da escolha
+    ultima_desambiguacao = None
+
+    if not intent:
+
+        return resposta_fallback()
+
+    resposta = respostas.get(
+        intent
+    )
+
+    if not resposta:
+
+        return resposta_fallback()
+
+    print()
+    print("ESCOLHA DA DESAMBIGUAÇÃO:")
+    print(
+        f"Opção: {numero}"
+    )
+    print(
+        f"Intent: {intent}"
+    )
+
+    return resposta
 
 
 # ============================================================
 # PROCESSAR PERGUNTA
 # ============================================================
 
-def processar_pergunta(
-    pergunta,
-    sessao_id
-):
+def processar_pergunta(pergunta):
 
-    # --------------------------------------------------------
-    # PRIMEIRO:
-    # verificar se o usuário estava escolhendo uma opção
-    # --------------------------------------------------------
+    global ultima_desambiguacao
 
-    escolha = processar_escolha(
-        pergunta,
-        sessao_id
-    )
+    pergunta_original = pergunta
 
-
-    if escolha is not None:
-
-        return escolha
-
-
-    # --------------------------------------------------------
-    # CLASSIFICAR PERGUNTA
-    # --------------------------------------------------------
-
-    resultados = obter_intents(
+    pergunta_normalizada = normalizar(
         pergunta
     )
 
-
-    if not resultados:
-
-        return {
-            "tipo": "fallback",
-            "resposta": RESPOSTA_FALLBACK
-        }
-
-
-    # --------------------------------------------------------
-    # MELHOR INTENT
-    # --------------------------------------------------------
-
-    melhor_intent = resultados[0][0]
-
-    melhor_score = resultados[0][1]
-
+    print()
+    print("=" * 60)
+    print("DEBUG PERGUNTA")
+    print(
+        f"Original: '{pergunta_original}'"
+    )
+    print(
+        f"Normalizada: '{pergunta_normalizada}'"
+    )
+    print(
+        "Existe no índice:",
+        pergunta_normalizada in indice_perguntas
+    )
+    print("=" * 60)
 
     # --------------------------------------------------------
-    # SEGUNDA INTENT
+    # OPÇÕES DE DESAMBIGUAÇÃO
     # --------------------------------------------------------
 
-    if len(resultados) > 1:
+    if pergunta_normalizada in (
+        "1",
+        "2"
+    ):
 
-        segunda_intent = resultados[1][0]
-
-        segundo_score = resultados[1][1]
-
-    else:
-
-        segunda_intent = None
-
-        segundo_score = None
-
-
-    # --------------------------------------------------------
-    # AMBIGUIDADE
-    # --------------------------------------------------------
-
-    if segunda_intent is not None:
-
-        diferenca = (
-            melhor_score
-            - segundo_score
+        resultado = processar_opcao(
+            int(pergunta_normalizada)
         )
 
-
-        # ----------------------------------------------------
-        # Se as duas estão próximas
-        # ----------------------------------------------------
-
-        if diferenca < MARGEM_AMBIGUIDADE:
-
-            desambiguacao = encontrar_desambiguacao(
-                melhor_intent,
-                segunda_intent
-            )
-
-
-            # ------------------------------------------------
-            # Encontrou configuração específica
-            # ------------------------------------------------
-
-            if desambiguacao:
-
-                opcoes = desambiguacao[
-                    "opcoes"
-                ]
-
-
-                sessoes[sessao_id] = {
-                    "opcoes": opcoes
-                }
-
-
-                return {
-                    "tipo": "desambiguacao",
-
-                    "resposta": desambiguacao[
-                        "pergunta"
-                    ],
-
-                    "opcoes": opcoes
-                }
-
+        if resultado:
+            return resultado
 
     # --------------------------------------------------------
-    # MODO SEGURO
+    # MATCH EXATO
     # --------------------------------------------------------
 
-    if MODO_SEGURO:
-
-        # Se temos uma segunda intent e a primeira
-        # não abriu vantagem suficiente, não chutamos.
-
-        if (
-            segunda_intent is not None
-            and (
-                melhor_score
-                - segundo_score
-            ) < MARGEM_CLAREZA
-        ):
-
-            return {
-                "tipo": "fallback",
-                "resposta": RESPOSTA_FALLBACK
-            }
-
-
-    # --------------------------------------------------------
-    # RESPOSTA NORMAL
-    # --------------------------------------------------------
-
-    resposta = respostas.get(
-        melhor_intent
+    intent_exata = procurar_match_exato(
+        pergunta_normalizada
     )
 
+    if intent_exata:
+
+        # Uma nova pergunta normal deve cancelar
+        # uma desambiguação anterior.
+        ultima_desambiguacao = None
+
+        print()
+        print("MATCH EXATO:")
+        print(
+            f"Pergunta: {pergunta_original}"
+        )
+        print(
+            f"Intent: {intent_exata}"
+        )
+
+        resposta = respostas.get(
+            intent_exata
+        )
+
+        if resposta:
+            return resposta
+
+    # --------------------------------------------------------
+    # CLASSIFICAÇÃO SVM
+    # --------------------------------------------------------
+
+    resultado = classificar(
+        pergunta_normalizada
+    )
+
+    if not resultado:
+
+        return resposta_fallback()
+
+    intent1 = resultado[
+        "intent"
+    ]
+
+    score1 = resultado[
+        "score"
+    ]
+
+    intent2 = resultado[
+        "segundo_intent"
+    ]
+
+    score2 = resultado[
+        "segundo_score"
+    ]
+
+    margem = resultado[
+        "margem"
+    ]
+
+    print()
+    print("CLASSIFICAÇÃO:")
+    print(
+        f"Pergunta: {pergunta_original}"
+    )
+    print(
+        f"1º: {intent1}"
+    )
+    print(
+        f"Score: {score1:.4f}"
+    )
+    print(
+        f"2º: {intent2}"
+    )
+    print(
+        f"Score: {score2:.4f}"
+    )
+    print(
+        f"Margem: {margem:.4f}"
+    )
+
+    # --------------------------------------------------------
+    # SCORE MUITO BAIXO
+    # --------------------------------------------------------
+
+    if score1 < SCORE_MINIMO:
+
+        print()
+        print(
+            "FALLBACK: score abaixo do mínimo."
+        )
+
+        ultima_desambiguacao = None
+
+        return resposta_fallback()
+
+    # --------------------------------------------------------
+    # MARGEM PEQUENA
+    # --------------------------------------------------------
+
+    if (
+        intent2
+        and margem < MARGEM_MINIMA
+    ):
+
+        print()
+        print(
+            "POSSÍVEL AMBIGUIDADE."
+        )
+
+        print(
+            f"Margem {margem:.4f} "
+            f"< mínimo {MARGEM_MINIMA:.4f}"
+        )
+
+        desambiguacao = encontrar_desambiguacao(
+            intent1,
+            intent2
+        )
+
+        if desambiguacao:
+
+            print(
+                "Desambiguação encontrada no FAQ."
+            )
+
+            resposta = gerar_desambiguacao(
+                desambiguacao
+            )
+
+            if resposta:
+                return resposta
+
+        # ----------------------------------------------------
+        # NÃO EXISTE DESAMBIGUAÇÃO CADASTRADA
+        # ----------------------------------------------------
+
+        print(
+            "Nenhuma desambiguação cadastrada "
+            "para esse par de intents."
+        )
+
+        ultima_desambiguacao = None
+
+        return (
+            "Fiquei em dúvida entre duas possibilidades. "
+            "Você pode reformular sua pergunta com um pouco "
+            "mais de detalhes?"
+        )
+
+    # --------------------------------------------------------
+    # INTENT SEGURA
+    # --------------------------------------------------------
+
+    print()
+    print(
+        "CLASSIFICAÇÃO ACEITA."
+    )
+
+    print(
+        f"Intent escolhida: {intent1}"
+    )
+
+    ultima_desambiguacao = None
+
+    resposta = respostas.get(
+        intent1
+    )
 
     if not resposta:
 
-        return {
-            "tipo": "fallback",
-            "resposta": RESPOSTA_FALLBACK
-        }
+        print(
+            "ERRO: intent sem resposta no FAQ."
+        )
 
+        return resposta_fallback()
 
-    return {
-        "tipo": "resposta",
-
-        "intent": melhor_intent,
-
-        "resposta": resposta
-    }
+    return resposta
 
 
 # ============================================================
-# PÁGINA PRINCIPAL
+# ROTA PRINCIPAL
 # ============================================================
 
-@app.route("/")
+@app.route(
+    "/",
+    methods=["GET"]
+)
 def index():
 
-    return render_template(
-        "index.html"
-    )
+    try:
+
+        return render_template(
+            "index.html"
+        )
+
+    except Exception:
+
+        return """
+        <html>
+        <head>
+            <title>Chatbot de Leilões</title>
+        </head>
+
+        <body>
+
+            <h1>Chatbot de Leilões</h1>
+
+            <p>
+                O servidor está funcionando.
+            </p>
+
+            <p>
+                Acesse a interface do chatbot.
+            </p>
+
+        </body>
+        </html>
+        """
 
 
 # ============================================================
@@ -573,144 +890,95 @@ def chat():
             silent=True
         )
 
-
         if not dados:
 
             return jsonify({
-                "tipo": "erro",
-                "resposta": "Requisição inválida."
+                "erro": "JSON inválido."
             }), 400
-
 
         pergunta = dados.get(
-            "mensagem",
-            ""
+            "mensagem"
         )
 
+        # Aceita também "message"
+        # caso seu front esteja usando esse nome.
+        if not pergunta:
 
-        sessao_id = dados.get(
-            "sessao_id",
-            "usuario"
-        )
-
-
-        if not isinstance(
-            pergunta,
-            str
-        ):
-
-            return jsonify({
-                "tipo": "erro",
-                "resposta": "Mensagem inválida."
-            }), 400
-
-
-        pergunta = pergunta.strip()
-
+            pergunta = dados.get(
+                "message"
+            )
 
         if not pergunta:
 
             return jsonify({
-                "tipo": "erro",
-                "resposta": "Digite uma pergunta."
+                "erro": "Mensagem não informada."
             }), 400
 
+        pergunta = str(
+            pergunta
+        ).strip()
 
-        resultado = processar_pergunta(
-            pergunta,
-            sessao_id
+        if not pergunta:
+
+            return jsonify({
+                "erro": "Mensagem vazia."
+            }), 400
+
+        resposta = processar_pergunta(
+            pergunta
         )
 
-
-        return jsonify(
-            resultado
-        )
-
+        return jsonify({
+            "resposta": resposta
+        })
 
     except Exception as erro:
 
+        print()
+        print("=" * 60)
+        print("ERRO NO /CHAT")
+        print("=" * 60)
         print(
-            "ERRO:",
-            erro
+            str(erro)
         )
 
-
         return jsonify({
-            "tipo": "erro",
-            "resposta": (
-                "Ocorreu um erro ao processar sua mensagem."
-            )
+            "erro": "Ocorreu um erro ao processar sua pergunta."
         }), 500
 
 
 # ============================================================
-# LIMPAR SESSÃO
-# ============================================================
-
-@app.route(
-    "/chat/reset",
-    methods=["POST"]
-)
-def reset_chat():
-
-    dados = request.get_json(
-        silent=True
-    ) or {}
-
-
-    sessao_id = dados.get(
-        "sessao_id",
-        "usuario"
-    )
-
-
-    sessoes.pop(
-        sessao_id,
-        None
-    )
-
-
-    return jsonify({
-        "status": "ok"
-    })
-
-
-# ============================================================
-# HEALTH CHECK
-# ============================================================
-
-@app.route(
-    "/health"
-)
-def health():
-
-    return jsonify({
-        "status": "ok",
-        "modelo": "carregado",
-        "intents": len(respostas)
-    })
-
-
-# ============================================================
-# EXECUTAR
+# INICIALIZAÇÃO
 # ============================================================
 
 if __name__ == "__main__":
 
-    print()
-    print(
-        "Servidor iniciado em:"
-    )
+    try:
 
-    print(
-        "http://127.0.0.1:5000"
-    )
+        inicializar()
 
-    print()
+        print()
+        print("=" * 60)
+        print("SERVIDOR INICIADO")
+        print("=" * 60)
+        print(
+            "http://127.0.0.1:5000"
+        )
+        print()
 
+        app.run(
+            host="127.0.0.1",
+            port=5000,
+            debug=True
+        )
 
-    app.run(
-        host="127.0.0.1",
-        port=5000,
-        debug=True
-    )
+    except Exception as erro:
+
+        print()
+        print("=" * 60)
+        print("ERRO AO INICIAR CHATBOT")
+        print("=" * 60)
+        print(
+            str(erro)
+        )
+        print()
