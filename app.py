@@ -10,13 +10,8 @@ from flask import Flask, request, jsonify, render_template
 # CONFIGURAÇÕES
 # ============================================================
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-MODEL_PATH = os.path.join(
-    BASE_DIR,
-    "models",
-    "modelo.pkl"
-)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # Corrigido para 1 nível
+MODEL_PATH = os.path.join(BASE_DIR, "models", "modelo.pkl")
 
 FAQ_PATH = os.path.join(
     BASE_DIR,
@@ -167,170 +162,49 @@ def normalizar(texto):
 
     return texto
 
-
-# ============================================================
-# CARREGAR FAQ
-# ============================================================
-
-from pathlib import Path
-import json
-
-BASE_DIR = Path(__file__).resolve().parent
-FAQ_PATH = BASE_DIR / "data" / "faq.json"
-
-print("=" * 60)
-print("CAMINHO DO APP:", BASE_DIR)
-print("CAMINHO DO FAQ:", FAQ_PATH)
-print("FAQ EXISTE?:", FAQ_PATH.exists())
-print("=" * 60)
-
-if not FAQ_PATH.exists():
-    raise FileNotFoundError(
-        f"FAQ não encontrado:\n{FAQ_PATH}"
-    )
-
-with open(FAQ_PATH, "r", encoding="utf-8") as f:
-    faq_data = json.load(f)
-
-
-
-# ============================================================
-# PREPARAR FAQ
-# ============================================================
-
-def preparar_faq(dados):
-    """
-    Prepara:
-
-    - índice de perguntas
-    - respostas
-    - desambiguações
-    """
-
-    global indice_perguntas
-    global respostas
-    global desambiguacoes
-
-    indice_perguntas = {}
-    respostas = {}
-    desambiguacoes = []
-
-    intents = dados.get(
-        "intents",
-        []
-    )
-
-    desambiguacoes = dados.get(
-        "desambiguacoes",
-        []
-    )
-
-    for item in intents:
-
-        intent = item.get(
-            "intent"
-        )
-
-        resposta = item.get(
-            "resposta",
-            ""
-        )
-
-        if not intent:
-            continue
-
-        respostas[intent] = resposta
-
-        perguntas = item.get(
-            "perguntas",
-            []
-        )
-
-        for pergunta in perguntas:
-
-            pergunta_normalizada = normalizar(
-                pergunta
-            )
-
-            if not pergunta_normalizada:
-                continue
-
-            indice_perguntas[
-                pergunta_normalizada
-            ] = intent
-
-
 # ============================================================
 # CARREGAR MODELO
 # ============================================================
 
 def carregar_modelo():
-
-    global modelo
+    global modelo, respostas, desambiguacoes, indice_perguntas
 
     if not os.path.exists(MODEL_PATH):
+        raise FileNotFoundError(f"Modelo não encontrado em: {MODEL_PATH}. Execute python src/train.py primeiro.")
 
-        raise FileNotFoundError(
-            f"""
-Modelo não encontrado.
-
-Esperado em:
-
-{MODEL_PATH}
-
-Execute primeiro:
-
-python src/train.py
-"""
-        )
-
-    print()
-    print("=" * 60)
-    print("CARREGANDO MODELO")
+    print("\n" + "=" * 60)
+    print("CARREGANDO MODELO E BASE DE DADOS")
     print("=" * 60)
 
-    modelo = joblib.load(
-        MODEL_PATH
-    )
+    # Carrega o pacote inteiro salvo pelo train.py
+    pacote = joblib.load(MODEL_PATH)
+    
+    # Extrai o modelo do dicionário
+    modelo = pacote["modelo"]
+    
+    # Extrai as regras de desambiguação e índice exato diretamente do pacote
+    desambiguacoes = pacote.get("desambiguacoes", [])
+    indice_perguntas = pacote.get("indice_exato", {})
+    
+    # Monta o dicionário de respostas de forma limpa
+    respostas = {}
+    for item in pacote.get("intents", []):
+        if "intent" in item and "resposta" in item:
+            respostas[item["intent"]] = item["resposta"]
 
-    print("Modelo carregado com sucesso.")
+    print("Modelo e contexto carregados com sucesso da memória (.pkl).")
 
-
-# ============================================================
-# CARREGAMENTO INICIAL
-# ============================================================
 
 def inicializar():
-
-    global faq
-
-    print()
-    print("=" * 60)
+    print("\n" + "=" * 60)
     print("CHATBOT DE LEILÕES")
     print("=" * 60)
 
-    print()
-    print("Carregando FAQ...")
-
-    faq = faq_data ()
-
-    preparar_faq(
-        faq
-    )
-
-    print(
-        f"Intents: {len(respostas)}"
-    )
-
-    print(
-        f"Perguntas exatas: {len(indice_perguntas)}"
-    )
-
-    print(
-        f"Desambiguações: {len(desambiguacoes)}"
-    )
-
     carregar_modelo()
+
+    print(f"Intents carregadas: {len(respostas)}")
+    print(f"Perguntas exatas: {len(indice_perguntas)}")
+    print(f"Desambiguações: {len(desambiguacoes)}")
 
 
 # ============================================================

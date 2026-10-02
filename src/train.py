@@ -14,7 +14,6 @@ from sklearn.pipeline import Pipeline
 # ============================================================
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 DATASET_PATH = os.path.join(
     BASE_DIR,
     "data",
@@ -26,10 +25,7 @@ MODEL_DIR = os.path.join(
     "models"
 )
 
-MODEL_PATH = os.path.join(
-    MODEL_DIR,
-    "modelo.pkl"
-)
+MODEL_PATH = os.path.join(BASE_DIR, "models", "modelo.pkl")
 
 
 # ============================================================
