@@ -10,7 +10,10 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Assistente de Leilões</title>
+    <title>
+        Chatbot - Leilões
+    </title>
+
 
     <style>
 
@@ -20,124 +23,365 @@
             padding: 0;
         }
 
+
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f3f4f6;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                #f1f3f5;
+
             height: 100vh;
+
             display: flex;
-            justify-content: center;
+
             align-items: center;
+
+            justify-content: center;
+
         }
+
 
         .chat-container {
+
             width: 100%;
-            max-width: 900px;
+
+            max-width: 850px;
+
             height: 90vh;
+
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 5px 25px
+                rgba(0, 0, 0, 0.12);
+
             display: flex;
+
             flex-direction: column;
+
             overflow: hidden;
+
         }
+
 
         .chat-header {
-            background: #111827;
+
+            background:
+                #1f2937;
+
             color: white;
-            padding: 22px;
+
+            padding: 18px 22px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
         }
+
 
         .chat-header h1 {
-            font-size: 21px;
-            margin-bottom: 5px;
+
+            font-size: 18px;
+
+            margin-bottom: 4px;
+
         }
 
-        .chat-header p {
-            color: #d1d5db;
-            font-size: 14px;
+
+        .chat-header span {
+
+            font-size: 13px;
+
+            color:
+                #d1d5db;
+
         }
+
+
+        #btn-reset {
+
+            background:
+                transparent;
+
+            color: white;
+
+            border:
+                1px solid
+                #6b7280;
+
+            padding:
+                7px 12px;
+
+            border-radius:
+                6px;
+
+            cursor: pointer;
+
+        }
+
+
+        #btn-reset:hover {
+
+            background:
+                #374151;
+
+        }
+
 
         .messages {
+
             flex: 1;
-            padding: 25px;
+
+            padding: 20px;
+
             overflow-y: auto;
+
             display: flex;
+
             flex-direction: column;
-            gap: 15px;
-            background: #f9fafb;
+
+            gap: 14px;
+
         }
+
 
         .message {
+
+            display: flex;
+
+        }
+
+
+        .message.user {
+
+            justify-content: flex-end;
+
+        }
+
+
+        .message.bot {
+
+            justify-content: flex-start;
+
+        }
+
+
+        .bubble {
+
             max-width: 75%;
-            padding: 13px 17px;
-            border-radius: 14px;
-            line-height: 1.5;
-            font-size: 15px;
+
+            padding:
+                12px 16px;
+
+            border-radius:
+                12px;
+
+            line-height:
+                1.5;
+
+            white-space:
+                pre-line;
+
         }
 
-        .bot {
-            align-self: flex-start;
-            background: white;
-            color: #1f2937;
-            border: 1px solid #e5e7eb;
-            border-bottom-left-radius: 4px;
-        }
 
-        .user {
-            align-self: flex-end;
-            background: #2563eb;
+        .user .bubble {
+
+            background:
+                #2563eb;
+
             color: white;
-            border-bottom-right-radius: 4px;
+
+            border-bottom-right-radius:
+                3px;
+
         }
+
+
+        .bot .bubble {
+
+            background:
+                #e5e7eb;
+
+            color:
+                #111827;
+
+            border-bottom-left-radius:
+                3px;
+
+        }
+
+
+        .options {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+
+            margin-top: 10px;
+
+            max-width: 75%;
+
+        }
+
+
+        .option-button {
+
+            background:
+                white;
+
+            border:
+                1px solid
+                #2563eb;
+
+            color:
+                #2563eb;
+
+            padding:
+                10px 14px;
+
+            border-radius:
+                8px;
+
+            text-align:
+                left;
+
+            cursor: pointer;
+
+            transition:
+                0.15s;
+
+        }
+
+
+        .option-button:hover {
+
+            background:
+                #2563eb;
+
+            color: white;
+
+        }
+
 
         .input-area {
+
+            border-top:
+                1px solid
+                #e5e7eb;
+
+            padding:
+                14px;
+
             display: flex;
-            padding: 18px;
-            border-top: 1px solid #e5e7eb;
-            background: white;
+
             gap: 10px;
+
         }
 
-        .input-area input {
+
+        #message-input {
+
             flex: 1;
-            border: 1px solid #d1d5db;
-            border-radius: 10px;
-            padding: 13px 15px;
-            font-size: 15px;
+
+            border:
+                1px solid
+                #d1d5db;
+
+            border-radius:
+                8px;
+
+            padding:
+                12px;
+
+            font-size:
+                15px;
+
             outline: none;
+
         }
 
-        .input-area input:focus {
-            border-color: #2563eb;
+
+        #message-input:focus {
+
+            border-color:
+                #2563eb;
+
         }
 
-        .input-area button {
-            border: none;
-            background: #2563eb;
+
+        #send-button {
+
+            background:
+                #2563eb;
+
             color: white;
-            padding: 0 24px;
-            border-radius: 10px;
-            font-size: 15px;
+
+            border: none;
+
+            padding:
+                0 20px;
+
+            border-radius:
+                8px;
+
             cursor: pointer;
+
+            font-size:
+                15px;
+
         }
 
-        .input-area button:hover {
-            background: #1d4ed8;
+
+        #send-button:hover {
+
+            background:
+                #1d4ed8;
+
         }
 
-        @media (max-width: 600px) {
 
-            body {
-                align-items: stretch;
-            }
+        .typing {
+
+            color:
+                #6b7280;
+
+            font-size:
+                13px;
+
+            padding-left:
+                4px;
+
+        }
+
+
+        @media (max-width: 700px) {
 
             .chat-container {
+
                 height: 100vh;
+
                 border-radius: 0;
+
             }
 
-            .message {
-                max-width: 85%;
+
+            .bubble,
+            .options {
+
+                max-width: 90%;
+
             }
 
         }
@@ -146,172 +390,504 @@
 
 </head>
 
+
 <body>
 
-    <div class="chat-container">
 
-        <div class="chat-header">
+<div class="chat-container">
 
-            <h1>Assistente de Leilões</h1>
 
-            <p>
-                Tire suas dúvidas sobre leilões, lotes,
-                lances, pagamentos e arrematação.
-            </p>
+    <div class="chat-header">
+
+        <div>
+
+            <h1>
+                Assistente de Leilões
+            </h1>
+
+            <span>
+                Atendimento automático
+            </span>
 
         </div>
 
 
-        <div
-            class="messages"
-            id="messages"
+        <button
+            id="btn-reset"
+            onclick="resetChat()"
         >
+            Nova conversa
+        </button>
 
-            <div class="message bot">
+    </div>
+
+
+    <div
+        id="messages"
+        class="messages"
+    >
+
+        <div class="message bot">
+
+            <div class="bubble">
 
                 Olá! 👋
 
-                <br><br>
-
-                Sou o assistente virtual de leilões.
-                Como posso ajudar?
+                Posso ajudar com dúvidas sobre
+                leilões, lances, lotes,
+                arrematação, pagamentos,
+                visitação e entrega dos bens.
 
             </div>
-
-        </div>
-
-
-        <div class="input-area">
-
-            <input
-                type="text"
-                id="messageInput"
-                placeholder="Digite sua pergunta..."
-                autocomplete="off"
-            >
-
-            <button onclick="enviarMensagem()">
-                Enviar
-            </button>
 
         </div>
 
     </div>
 
 
-    <script>
+    <div
+        id="typing"
+        class="typing"
+        style="display: none;"
+    >
+        Digitando...
+    </div>
 
-        const input = document.getElementById("messageInput");
 
-        const messages = document.getElementById("messages");
+    <div class="input-area">
+
+        <input
+            id="message-input"
+            type="text"
+            placeholder="Digite sua pergunta..."
+            autocomplete="off"
+        >
 
 
-        // ==========================================
-        // ADICIONAR MENSAGEM NA TELA
-        // ==========================================
+        <button
+            id="send-button"
+            onclick="sendMessage()"
+        >
+            Enviar
+        </button>
 
-        function adicionarMensagem(texto, tipo) {
+    </div>
 
-            const div = document.createElement("div");
 
-            div.classList.add(
-                "message",
-                tipo
-            );
+</div>
 
-            div.innerText = texto;
 
-            messages.appendChild(div);
+<script>
 
-            messages.scrollTop = messages.scrollHeight;
+
+// ============================================================
+// SESSÃO
+// ============================================================
+
+let sessionId =
+    localStorage.getItem(
+        "chatbot_session_id"
+    );
+
+
+if (!sessionId) {
+
+    sessionId =
+        crypto.randomUUID();
+
+    localStorage.setItem(
+        "chatbot_session_id",
+        sessionId
+    );
+}
+
+
+// ============================================================
+// ELEMENTOS
+// ============================================================
+
+const input =
+    document.getElementById(
+        "message-input"
+    );
+
+
+const messages =
+    document.getElementById(
+        "messages"
+    );
+
+
+const typing =
+    document.getElementById(
+        "typing"
+    );
+
+
+// ============================================================
+// ENTER
+// ============================================================
+
+input.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            sendMessage();
+
         }
 
-
-        // ==========================================
-        // ENVIAR MENSAGEM
-        // ==========================================
-
-        async function enviarMensagem() {
-
-            const mensagem = input.value.trim();
-
-            if (!mensagem) {
-                return;
-            }
+    }
+);
 
 
-            // Mostra mensagem do usuário
+// ============================================================
+// ADICIONAR MENSAGEM
+// ============================================================
 
-            adicionarMensagem(
-                mensagem,
-                "user"
+function addMessage(
+    text,
+    type
+) {
+
+    const message =
+        document.createElement(
+            "div"
+        );
+
+
+    message.className =
+        `message ${type}`;
+
+
+    const bubble =
+        document.createElement(
+            "div"
+        );
+
+
+    bubble.className =
+        "bubble";
+
+
+    bubble.textContent =
+        text;
+
+
+    message.appendChild(
+        bubble
+    );
+
+
+    messages.appendChild(
+        message
+    );
+
+
+    scrollToBottom();
+
+}
+
+
+// ============================================================
+// ADICIONAR OPÇÕES
+// ============================================================
+
+function addOptions(
+    options
+) {
+
+    const container =
+        document.createElement(
+            "div"
+        );
+
+
+    container.className =
+        "options";
+
+
+    options.forEach(
+        function(opcao, index) {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "option-button";
+
+
+            button.textContent =
+                `${index + 1}. ${opcao.texto}`;
+
+
+            button.onclick =
+                function() {
+
+                    sendMessage(
+                        String(index + 1)
+                    );
+
+                };
+
+
+            container.appendChild(
+                button
             );
 
-
-            // Limpa campo
-
-            input.value = "";
+        }
+    );
 
 
-            try {
+    messages.appendChild(
+        container
+    );
 
-                const resposta = await fetch(
-                    "/chat",
-                    {
-                        method: "POST",
 
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+    scrollToBottom();
 
-                        body: JSON.stringify({
-                            mensagem: mensagem
+}
+
+
+// ============================================================
+// SCROLL
+// ============================================================
+
+function scrollToBottom() {
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+}
+
+
+// ============================================================
+// ENVIAR MENSAGEM
+// ============================================================
+
+async function sendMessage(
+    mensagemForcada = null
+) {
+
+    const mensagem =
+        mensagemForcada !== null
+            ? mensagemForcada
+            : input.value.trim();
+
+
+    if (!mensagem) {
+
+        return;
+
+    }
+
+
+    // Se veio do campo de texto,
+    // limpa o campo.
+
+    if (
+        mensagemForcada === null
+    ) {
+
+        input.value = "";
+
+    }
+
+
+    addMessage(
+        mensagem,
+        "user"
+    );
+
+
+    typing.style.display =
+        "block";
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/chat",
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            mensagem:
+                                mensagem,
+
+                            sessao_id:
+                                sessionId
                         })
-                    }
-                );
-
-
-                const dados = await resposta.json();
-
-
-                adicionarMensagem(
-                    dados.resposta,
-                    "bot"
-                );
-
-
-            } catch (erro) {
-
-                adicionarMensagem(
-                    "Ocorreu um erro ao entrar em contato com o chatbot.",
-                    "bot"
-                );
-
-                console.error(erro);
-
-            }
-
-        }
-
-
-        // ==========================================
-        // ENTER PARA ENVIAR
-        // ==========================================
-
-        input.addEventListener(
-            "keydown",
-            function(event) {
-
-                if (event.key === "Enter") {
-
-                    enviarMensagem();
 
                 }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        typing.style.display =
+            "none";
+
+
+        if (
+            data.tipo ===
+            "desambiguacao"
+        ) {
+
+            addMessage(
+                data.resposta,
+                "bot"
+            );
+
+
+            addOptions(
+                data.opcoes
+            );
+
+
+            return;
+
+        }
+
+
+        if (
+            data.tipo ===
+            "erro_escolha"
+        ) {
+
+            addMessage(
+                data.resposta,
+                "bot"
+            );
+
+
+            if (
+                data.opcoes
+            ) {
+
+                addOptions(
+                    data.opcoes
+                );
+
+            }
+
+
+            return;
+
+        }
+
+
+        addMessage(
+            data.resposta,
+            "bot"
+        );
+
+
+    } catch (error) {
+
+        typing.style.display =
+            "none";
+
+
+        addMessage(
+            "Não foi possível conectar ao servidor do chatbot.",
+            "bot"
+        );
+
+
+        console.error(
+            error
+        );
+
+    }
+
+
+    input.focus();
+
+}
+
+
+// ============================================================
+// NOVA CONVERSA
+// ============================================================
+
+async function resetChat() {
+
+    try {
+
+        await fetch(
+            "/chat/reset",
+            {
+
+                method:
+                    "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify({
+                        sessao_id:
+                            sessionId
+                    })
 
             }
         );
 
-    </script>
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+
+    sessionId =
+        crypto.randomUUID();
+
+
+    localStorage.setItem(
+        "chatbot_session_id",
+        sessionId
+    );
+
+
+    messages.innerHTML = "";
+
+
+    addMessage(
+        "Nova conversa iniciada. Como posso ajudar?",
+        "bot"
+    );
+
+
+    input.focus();
+
+}
+
+
+</script>
+
 
 </body>
 

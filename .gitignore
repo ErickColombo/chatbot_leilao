@@ -47,3 +47,32 @@ Thumbs.db
 # ==============================
 
 *.log
+.vscode/
+data/*
+!data/.gitkeep
+*.csv
+*.tsv
+*.xlsx
+*.parquet
+*.json
+*.sqlite
+*.db
+models/*
+!models/.gitkeep
+*.pkl
+*.pt
+*.pth
+*.h5
+*.hdf5
+*.onnx
+*.joblib
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+.env
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/

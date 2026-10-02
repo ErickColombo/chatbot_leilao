@@ -1,570 +1,917 @@
-[
+{
+  "intents": [
     {
-        "intent": "visitar_bem",
-        "perguntas": [
-            "É possível visitar o bem que será leiloado?",
-            "Posso visitar o bem antes do leilão?",
-            "Posso visitar o imóvel antes do leilão?",
-            "Quero visitar o bem antes de dar um lance",
-            "Tem como visitar o lote?",
-            "É possível conhecer o imóvel pessoalmente?",
-            "Posso conhecer o bem antes de comprar?",
-            "Como faço para visitar o bem?",
-            "Onde posso visitar o imóvel?",
-            "Quero ver o imóvel antes do leilão",
-            "Posso ver o bem pessoalmente?",
-            "É permitido visitar o bem?",
-            "Como funciona a visitação do imóvel?",
-            "Tem visitação dos bens leiloados?",
-            "Posso visitar o lote antes de arrematar?"
-        ],
-        "resposta": "Como o bem leiloado será vendido no estado em que se encontra, é muito importante que o arrematante o visite para avaliar suas condições. No edital e no descritivo detalhado está localizado o endereço do bem. Caso o executado ou fiel depositário impeça a visita, o interessado deve solicitar o acompanhamento de um oficial de justiça perante o Fórum responsável ou entrar em contato com o atendimento."
+      "intent": "saudacao",
+      "perguntas": [
+        "Olá",
+        "Oi",
+        "Oie",
+        "Bom dia",
+        "Boa tarde",
+        "Boa noite",
+        "Tudo bem?",
+        "Opa",
+        "E aí",
+        "Tem alguém aí?"
+      ],
+      "resposta": "Olá! Sou o assistente virtual. Como posso ajudar você com suas dúvidas sobre nossos leilões hoje?"
     },
     {
-        "intent": "suspensao_venda_embargos",
-        "perguntas": [
-            "A venda pode ser suspensa por embargos à arrematação?",
-            "Os embargos podem suspender o leilão?",
-            "Um recurso pode impedir a entrega do bem?",
-            "Se houver embargos à arrematação o leilão para?",
-            "O executado pode suspender a venda?",
-            "Os embargos têm efeito suspensivo?",
-            "A arrematação pode ser cancelada por recurso?",
-            "Um recurso contra a arrematação suspende a venda?",
-            "Se o executado entrar com recurso o bem deixa de ser entregue?",
-            "Os embargos do executado impedem a arrematação?"
-        ],
-        "resposta": "Mesmo que o executado utilize recurso eventual relacionado aos Embargos à Arrematação, este não terá efeito suspensivo à venda, conforme o caput do Art. 903 do CPC. A arrematação é considerada perfeita, acabada e irretratável após a assinatura do auto pelo juiz, pelo arrematante e pelo leiloeiro, ressalvadas as disposições legais aplicáveis."
+      "intent": "despedida",
+      "perguntas": [
+        "Tchau",
+        "Até logo",
+        "Adeus",
+        "Até mais",
+        "Vou nessa",
+        "Fui",
+        "Encerrar",
+        "Sair"
+      ],
+      "resposta": "Até logo! Se precisar de mais alguma informação sobre nossos leilões, estarei por aqui. Um abraço!"
     },
     {
-        "intent": "seguranca_site",
-        "perguntas": [
-            "O site é seguro?",
-            "O site do leilão é confiável?",
-            "Como funciona a segurança do site?",
-            "Meus dados estão protegidos?",
-            "O site possui certificado de segurança?",
-            "A conexão do site é segura?",
-            "Como meus dados são protegidos?",
-            "O site usa SSL?",
-            "Os meus dados pessoais ficam seguros?",
-            "Existe criptografia no site?",
-            "O site utiliza certificado SSL?"
-        ],
-        "resposta": "O Site Daniel Garcia Leilões utiliza certificado SSL (Secure Socket Layer) de segurança. O sistema utiliza criptografia para proteger os dados do usuário durante a transmissão pela Internet."
+      "intent": "agradecimento",
+      "perguntas": [
+        "Obrigado",
+        "Obrigada",
+        "Valeu",
+        "Agradeço",
+        "Muito obrigado",
+        "Muito obrigada",
+        "Valeu mesmo",
+        "Perfeito, obrigado",
+        "Entendi, obrigado"
+      ],
+      "resposta": "Por nada! Fico muito feliz em poder ajudar. Tem mais alguma dúvida sobre lances, editais ou leilões em que eu possa ser útil?"
     },
     {
-        "intent": "entrega_bem_arrematado",
-        "perguntas": [
-            "Como funciona a entrega do bem arrematado?",
-            "Quando posso pegar o bem que arrematei?",
-            "Quando recebo o bem arrematado?",
-            "Posso retirar o bem imediatamente?",
-            "Como faço para tomar posse do bem?",
-            "Quando posso tomar posse do imóvel?",
-            "Depois de arrematar posso retirar o bem?",
-            "O que preciso para receber o bem?",
-            "Como funciona a retirada do bem?",
-            "Quando o bem será entregue?"
-        ],
-        "resposta": "O arrematante só poderá tomar posse do bem após o cumprimento do Mandado de Entrega, documento expedido pelo cartório."
+      "intent": "ajuda",
+      "perguntas": [
+        "Preciso de ajuda",
+        "Me ajude",
+        "O que você sabe fazer?",
+        "Como você pode me ajudar?",
+        "Quais são as opções?",
+        "Socorro",
+        "Não estou entendendo",
+        "Quero tirar dúvidas"
+      ],
+      "resposta": "Posso ajudar respondendo suas dúvidas sobre o processo de leilão, como dar lances, pagamentos, visitação de bens, comissão do leiloeiro, editais, entre outros. O que você gostaria de saber?"
     },
     {
-        "intent": "condicoes_venda_pagamento",
-        "perguntas": [
-            "Como funcionam as condições de venda?",
-            "Como funciona o pagamento do leilão?",
-            "Quais são as condições de pagamento?",
-            "Como devo pagar o bem arrematado?",
-            "Quais são as regras de pagamento?",
-            "Onde vejo as condições de venda?",
-            "Quais regras preciso seguir para comprar um lote?",
-            "Como funciona a compra no leilão?",
-            "Quais são as condições para arrematar?",
-            "Como funciona o processo de pagamento?"
-        ],
-        "resposta": "O processo segue a legislação aplicável, como a Lei de Execuções Fiscais, Execuções Trabalhistas, CLT, Nova Lei de Falências, Código de Processo Civil, Resoluções do CNJ, TJSC e demais normas aplicáveis. As condições específicas de cada leilão estão descritas no respectivo Edital e nas Condições de Venda e Pagamento."
+      "intent": "identidade_bot",
+      "perguntas": [
+        "Quem é você?",
+        "Você é um robô?",
+        "Com quem estou falando?",
+        "Você é humano?",
+        "Você é uma pessoa real?"
+      ],
+      "resposta": "Sou um assistente virtual criado para responder às suas dúvidas sobre nossos leilões de forma rápida e 24 horas por dia! Como posso te ajudar hoje?"
     },
     {
-        "intent": "divulgacao_leiloes",
-        "perguntas": [
-            "Como são divulgados os leilões?",
-            "Onde posso encontrar os leilões?",
-            "Onde os leilões são anunciados?",
-            "Como fico sabendo dos próximos leilões?",
-            "Onde são publicados os leilões?",
-            "Vocês divulgam os leilões por email?",
-            "Como recebo novidades dos leilões?",
-            "Onde encontro informações sobre os leilões?",
-            "Como posso acompanhar os próximos leilões?",
-            "Existe newsletter dos leilões?"
-        ],
-        "resposta": "A divulgação acontece principalmente por meio eletrônico. Após a publicação dos Editais Oficiais, as informações são disponibilizadas no portal e os usuários cadastrados na newsletter também podem receber informações por e-mail. A divulgação também pode ocorrer em portais da Internet, jornais, revistas, televisão e redes sociais como Facebook, Instagram, WhatsApp e LinkedIn."
+      "intent": "visitar_bem",
+      "perguntas": [
+        "É possível visitar o bem que será leiloado?",
+        "Posso visitar o bem antes do leilão?",
+        "Posso ver o imóvel antes de dar um lance?",
+        "É possível conhecer o bem pessoalmente?",
+        "Como faço para visitar o bem?",
+        "Onde posso visitar o lote?",
+        "Posso visitar o lote antes de comprar?",
+        "Quero fazer uma visita ao imóvel leiloado",
+        "Quero visitar o bem",
+        "Como funciona a visitação do bem?",
+        "Tem como ver o bem antes do leilão?",
+        "Posso ir até o local para avaliar o bem?",
+        "É permitido visitar o imóvel do leilão?",
+        "Como agendar uma visita ao bem?",
+        "Preciso visitar o bem antes de arrematar?"
+      ],
+      "resposta": "Como o bem leiloado será vendido no estado em que se encontra, é muito importante que o arrematante o visite para avaliar suas condições. No edital e no descritivo detalhado está localizado o endereço do bem. Caso o executado ou fiel depositário impeça de alguma forma o arrematante de visitar o local, o mesmo deve solicitar o acompanhamento de um oficial de justiça perante o Fórum responsável ou entrar em contato com o nosso atendimento."
     },
     {
-        "intent": "valor_minimo_venda",
-        "perguntas": [
-            "O que é valor mínimo de venda?",
-            "O que significa valor mínimo?",
-            "Qual é o valor mínimo para vender o bem?",
-            "Existe um valor mínimo para arrematar?",
-            "Como funciona o valor mínimo do lote?",
-            "O que acontece se o valor mínimo não for atingido?",
-            "Se ninguém atingir o valor mínimo o que acontece?",
-            "Posso comprar abaixo do valor mínimo?",
-            "O lance abaixo do mínimo pode ser aceito?",
-            "Existe preço mínimo no leilão?"
-        ],
-        "resposta": "Quando um bem é apregoado é estipulado um valor mínimo para sua venda. Caso esse valor não seja alcançado, caberá ao Juízo Responsável aprovar ou não a nova condição. O lance adicional poderá ou não ser aceito pelo Leiloeiro."
+      "intent": "suspensao_venda_embargos",
+      "perguntas": [
+        "A venda pode ser suspensa por recurso?",
+        "Os embargos à arrematação suspendem a venda?",
+        "Um recurso pode suspender o leilão?",
+        "A arrematação pode ser suspensa?",
+        "Os embargos impedem a entrega do bem?",
+        "O executado pode impedir a venda por meio de recurso?",
+        "Se houver embargos a venda fica suspensa?",
+        "O recurso dos embargos tem efeito suspensivo?",
+        "A venda pode parar por causa dos embargos?",
+        "O que acontece se o executado entrar com recurso?",
+        "Embargos à arrematação suspendem o leilão?",
+        "O recurso pode impedir a entrega do bem ao arrematante?"
+      ],
+      "resposta": "Mesmo que o executado utilize recurso eventual relacionado aos Embargos à Arrematação, este não terá efeito suspensivo à venda, ou seja, não impedirá a entrega do bem ao arrematante, conforme previsto no caput do Art. 903 do Código de Processo Civil (CPC)."
     },
     {
-        "intent": "impostos_multas",
-        "perguntas": [
-            "Quais impostos estão pendentes?",
-            "O bem possui multas?",
-            "Quem paga os impostos atrasados?",
-            "Existem multas pendentes no imóvel?",
-            "O comprador assume as dívidas do imóvel?",
-            "Tenho que pagar os impostos atrasados?",
-            "Como saber se existem débitos no bem?",
-            "Onde vejo os impostos pendentes?",
-            "Quem é responsável pelas multas do bem?",
-            "O arrematante assume as dívidas tributárias?",
-            "Existem débitos tributários no lote?"
-        ],
-        "resposta": "Cada leilão possui regras específicas sobre impostos e multas pendentes, definidas pelo Tribunal ou Juízo responsável. Os detalhes estão no respectivo Edital e nas Condições de Venda. Conforme a legislação aplicável, inclusive o parágrafo único do art. 130 do Código Tributário Nacional, não há sucessão tributária para quem compra bens em leilões judiciais nas hipóteses previstas em lei."
+      "intent": "seguranca_site",
+      "perguntas": [
+        "O site é seguro?",
+        "O site do leilão é confiável?",
+        "Como funciona a segurança do site?",
+        "Meus dados estão seguros?",
+        "O site protege meus dados?",
+        "A conexão do site é segura?",
+        "O site possui certificado SSL?",
+        "Como meus dados são protegidos?",
+        "É seguro fazer cadastro no site?",
+        "É seguro enviar meus documentos?",
+        "Como funciona a política de segurança?",
+        "Quero saber sobre a segurança do site",
+        "O site utiliza criptografia?",
+        "Meus dados pessoais ficam protegidos?"
+      ],
+      "resposta": "O Site Daniel Garcia Leilões utiliza certificado SSL (Secure Socket Layer) de segurança. O sistema utiliza criptografia para proteger os dados transmitidos pela internet."
     },
     {
-        "intent": "comissao_leiloeiro",
-        "perguntas": [
-            "Qual será o valor da comissão do leiloeiro?",
-            "Quanto é a comissão do leiloeiro?",
-            "Qual a porcentagem da comissão?",
-            "Quanto vou pagar de comissão?",
-            "Existe comissão do leiloeiro?",
-            "Tenho que pagar comissão além do lance?",
-            "A comissão está incluída no lance?",
-            "Qual é a taxa do leiloeiro?",
-            "Quanto custa a comissão?",
-            "A comissão é de quanto por cento?",
-            "Quem paga a comissão do leiloeiro?"
-        ],
-        "resposta": "Baseado no valor de venda, a comissão do Leiloeiro será no mínimo de 5% do valor da arrematação, conforme o art. 24, parágrafo único, do Decreto nº 21.981 de 19/10/1932. A comissão não está incluída no valor do lance."
+      "intent": "entrega_bem",
+      "perguntas": [
+        "Como funciona a entrega do bem arrematado?",
+        "Quando posso pegar o bem que arrematei?",
+        "Quando posso tomar posse do bem?",
+        "Como recebo o bem arrematado?",
+        "Posso retirar o bem depois do pagamento?",
+        "Quando posso retirar o lote?",
+        "Como funciona a retirada do bem?",
+        "Quando o bem será entregue?",
+        "Depois de pagar posso pegar o bem?",
+        "Como faço para receber o imóvel arrematado?",
+        "Posso tomar posse imediatamente?",
+        "O que preciso para receber o bem?",
+        "Preciso de algum documento para retirar o bem?"
+      ],
+      "resposta": "O arrematante só poderá tomar posse do bem após o cumprimento do Mandado de Entrega, documento expedido pelo cartório."
     },
     {
-        "intent": "parcelamento_arrematacao",
-        "perguntas": [
-            "É possível parcelar o valor da arrematação?",
-            "Posso parcelar o pagamento do bem?",
-            "O leilão aceita parcelamento?",
-            "Posso comprar parcelado?",
-            "Tem como pagar o lote parcelado?",
-            "Existe financiamento do valor da arrematação?",
-            "Como funciona o parcelamento?",
-            "Posso dividir o valor do lance?",
-            "O pagamento pode ser parcelado?",
-            "Todos os lotes podem ser parcelados?"
-        ],
-        "resposta": "Se autorizada pelo Juízo, a opção de parcelamento estará presente no Edital e na descrição do lote. É necessário verificar as condições específicas de cada leilão."
+      "intent": "condicoes_venda_pagamento",
+      "perguntas": [
+        "Como funcionam as condições de venda e pagamento?",
+        "Quais são as condições de pagamento?",
+        "Como funciona o pagamento do leilão?",
+        "Quais são as regras para pagamento?",
+        "Como devo pagar o bem arrematado?",
+        "Quais são as condições de venda?",
+        "Onde vejo as condições de pagamento?",
+        "Quais regras preciso seguir para comprar um lote?",
+        "Como funciona a compra no leilão?",
+        "Quais são as regras do leilão?",
+        "Onde encontro as regras de pagamento?",
+        "Como saber as condições de venda do lote?"
+      ],
+      "resposta": "O processo segue a legislação necessária, como a Lei de Execuções Fiscais, Execuções Trabalhistas, CLT, Nova Lei de Falências, Código de Processo Civil, Resoluções do CNJ, TJSC e demais normas aplicáveis. O Leiloeiro Oficial fica isento de responsabilidade pelas exigências legais, prazos e procedimentos judiciais. Seu papel é auxiliar na elaboração das regras devido à sua experiência em leilões presenciais, eletrônicos e simultâneos. As condições específicas de cada leilão devem ser consultadas no respectivo Edital e nas Condições de Venda e Pagamento."
     },
     {
-        "intent": "auto_arrematacao_assinatura",
-        "perguntas": [
-            "Como funciona a assinatura do Auto de Arrematação?",
-            "Quem assina o Auto de Arrematação?",
-            "Preciso assinar o Auto de Arrematação?",
-            "Como assino o auto se participei pela internet?",
-            "O leiloeiro pode assinar por mim?",
-            "Quem assina o documento da arrematação?",
-            "Como funciona a assinatura para quem participa online?",
-            "Preciso comparecer pessoalmente para assinar?",
-            "Posso assinar o Auto de Arrematação pela internet?"
-        ],
-        "resposta": "Se o arrematante estiver no leilão físico, deve assinar o Auto de Arrematação pessoalmente. Se a participação for pela internet, o Leiloeiro poderá assinar em seu nome, conforme as regras das Condições de Venda e Pagamento aceitas pelo participante."
+      "intent": "divulgacao_leiloes",
+      "perguntas": [
+        "Como são divulgados os leilões?",
+        "Onde são divulgados os leilões?",
+        "Como fico sabendo dos novos leilões?",
+        "Onde encontro os leilões?",
+        "Como receber novidades dos leilões?",
+        "Vocês avisam por email?",
+        "Existe newsletter?",
+        "Como faço para receber os leilões por email?",
+        "Onde vejo os próximos leilões?",
+        "Como acompanhar os novos leilões?",
+        "Vocês divulgam no WhatsApp?",
+        "Vocês divulgam no Instagram?",
+        "Onde são publicados os leilões?"
+      ],
+      "resposta": "A divulgação acontece principalmente por meio eletrônico. A partir da publicação nos Editais Oficiais, as informações são disponibilizadas no portal e os usuários cadastrados na newsletter também podem ser informados por e-mail. A divulgação também ocorre em meios tradicionais e digitais, como portais da internet, jornais, revistas, televisão, Facebook, Instagram, WhatsApp, LinkedIn, entre outros. Para receber novidades, é possível realizar o cadastro na newsletter pelo endereço http://www.danielgarcialeiloes.com.br/contato/newsletter"
     },
     {
-        "intent": "inadimplencia_arrematante",
-        "perguntas": [
-            "O que acontece se eu não pagar o lance?",
-            "O que acontece se eu não cumprir o pagamento?",
-            "Se eu não pagar o arremate o que acontece?",
-            "E se eu atrasar o pagamento?",
-            "O que acontece se eu não honrar o pagamento?",
-            "Posso perder o direito ao lote se não pagar?",
-            "Existe multa se eu não pagar?",
-            "Posso ser impedido de participar de outros leilões?",
-            "Quais são as consequências de não pagar o arremate?",
-            "O que acontece se eu desistir depois de arrematar?"
-        ],
-        "resposta": "Se o arrematante não honrar os pagamentos corretamente, tanto em relação ao prazo quanto ao valor, poderá arcar com multa e ficar impedido de participar de outros leilões judiciais, além de outras consequências previstas na legislação e nas condições do leilão."
+      "intent": "valor_minimo_venda",
+      "perguntas": [
+        "O que é valor mínimo de venda?",
+        "O que significa valor mínimo?",
+        "Qual é o valor mínimo do lote?",
+        "Como funciona o valor mínimo?",
+        "O que acontece se não atingir o valor mínimo?",
+        "Preciso atingir o valor mínimo para arrematar?",
+        "O que acontece se o lance não chegar no mínimo?",
+        "Quem define o valor mínimo?",
+        "O valor mínimo pode ser alterado?",
+        "Se o valor mínimo não for atingido o que acontece?",
+        "O que é preço mínimo do leilão?"
+      ],
+      "resposta": "Quando um bem é apregoado, é estipulado um valor mínimo para sua venda. Caso esse valor não seja alcançado, caberá ao Juízo responsável aprovar ou não uma nova condição. Um lance adicional poderá ou não ser aceito também pelo Leiloeiro."
     },
     {
-        "intent": "fraude_arrematacao",
-        "perguntas": [
-            "O que acontece em caso de fraude na arrematação?",
-            "É crime impedir alguém de participar do leilão?",
-            "Posso impedir outro participante de dar lance?",
-            "O que diz a lei sobre fraude em leilão?",
-            "O que acontece se alguém tentar fraudar o leilão?",
-            "É permitido afastar um concorrente?",
-            "O que diz o artigo 358 do Código Penal?",
-            "Existe punição para fraude em arrematação judicial?",
-            "Posso oferecer vantagem para outro participante desistir?"
-        ],
-        "resposta": "O Art. 358 do Código Penal prevê punição para quem impedir, perturbar ou fraudar arrematação judicial, ou procurar afastar concorrente ou licitante por meio de violência, grave ameaça, fraude ou oferecimento de vantagem."
+      "intent": "impostos_multas",
+      "perguntas": [
+        "Quais são os impostos e multas pendentes?",
+        "O bem possui dívidas?",
+        "Quem paga os impostos atrasados?",
+        "Quem paga as multas do veículo?",
+        "O lote tem multas?",
+        "O imóvel possui impostos atrasados?",
+        "Existem débitos no bem?",
+        "Quem fica responsável pelos débitos?",
+        "O arrematante assume as dívidas?",
+        "Existem impostos pendentes?",
+        "Como saber se existem multas?",
+        "Como saber se o bem tem dívidas?",
+        "O comprador assume os impostos atrasados?",
+        "O comprador assume débitos anteriores?"
+      ],
+      "resposta": "Cada leilão possui regras específicas referentes aos impostos e multas pendentes, definidas pelo Tribunal ou Juízo responsável. Os detalhes estão especificados no respectivo Edital e nas Condições de Venda. Conforme a legislação aplicável, inclusive o parágrafo único do art. 130 do Código Tributário Nacional, não há sucessão tributária para quem compra bens em determinados leilões judiciais. É importante consultar sempre o Edital específico do lote para verificar eventuais débitos, responsabilidades e condições."
     },
     {
-        "intent": "incremento_minimo",
-        "perguntas": [
-            "O que é incremento mínimo?",
-            "O que significa incremento mínimo?",
-            "Como funciona o incremento mínimo?",
-            "Qual é o incremento mínimo?",
-            "Quanto posso aumentar meu lance?",
-            "De quanto é o aumento mínimo do lance?",
-            "Quanto preciso aumentar para dar outro lance?",
-            "Qual o valor mínimo para cobrir outro lance?",
-            "Como funciona o aumento dos lances?",
-            "Posso dar um lance menor que o incremento?"
-        ],
-        "resposta": "É o acréscimo mínimo a ser ofertado sobre o lance anterior. O interessado poderá ofertar um valor maior ou respeitar o incremento mínimo ao dar seu lance. O Leiloeiro pode alterar esse valor durante o leilão."
+      "intent": "comissao_leiloeiro",
+      "perguntas": [
+        "Qual é o valor da comissão do leiloeiro?",
+        "Quanto é a comissão do leiloeiro?",
+        "Qual a porcentagem do leiloeiro?",
+        "Quanto preciso pagar de comissão?",
+        "A comissão está incluída no lance?",
+        "A comissão do leiloeiro está inclusa?",
+        "Tenho que pagar comissão além do lance?",
+        "Quanto custa a comissão?",
+        "Qual o percentual da comissão?",
+        "Existe taxa do leiloeiro?",
+        "O lance já inclui a comissão?"
+      ],
+      "resposta": "Baseado no valor de venda, a comissão do Leiloeiro será de no mínimo 5% (cinco por cento) do valor da arrematação, conforme art. 24, parágrafo único, do Decreto nº 21.981 de 19/10/1932. A comissão não está incluída no valor do lance."
     },
     {
-    "intent": "o_que_e_lance",
-    "perguntas": [
+      "intent": "parcelamento",
+      "perguntas": [
+        "É possível parcelar o valor da arrematação?",
+        "Posso parcelar o pagamento?",
+        "O leilão aceita parcelamento?",
+        "Posso comprar parcelado?",
+        "Dá para parcelar o lote?",
+        "Posso pagar em parcelas?",
+        "Como funciona o parcelamento?",
+        "O imóvel pode ser parcelado?",
+        "O bem pode ser comprado parcelado?",
+        "Tem opção de parcelamento?"
+      ],
+      "resposta": "Se autorizada pelo Juízo, a opção de parcelamento estará presente no Edital e na descrição do lote. É necessário consultar as condições específicas do lote para verificar se o parcelamento está disponível."
+    },
+    {
+      "intent": "assinatura_auto_arrematacao",
+      "perguntas": [
+        "Como funciona a assinatura do Auto de Arrematação?",
+        "Quem assina o auto de arrematação?",
+        "Preciso assinar o auto?",
+        "Como assino o auto de arrematação?",
+        "Posso assinar o auto pela internet?",
+        "O leiloeiro pode assinar por mim?",
+        "Como funciona a assinatura para quem participa online?",
+        "Preciso ir pessoalmente para assinar?",
+        "Quem assina o documento de arrematação?"
+      ],
+      "resposta": "Se o arrematante estiver no leilão físico, deve assinar o Auto de Arrematação pessoalmente. Se a participação for pela internet, o Leiloeiro poderá assinar em seu nome. Ao concordar com as regras estipuladas nas Condições de Venda e Pagamento, o interessado concede autorização para a assinatura do Auto em seu lugar, conforme as regras aplicáveis."
+    },
+    {
+      "intent": "inadimplencia_arrematante",
+      "perguntas": [
+        "O que acontece se eu não pagar o lance?",
+        "O que acontece se o arrematante não pagar?",
+        "E se eu não cumprir o pagamento?",
+        "O que acontece se eu atrasar o pagamento?",
+        "Se eu não pagar o leilão o que acontece?",
+        "Quais as consequências de não pagar?",
+        "Posso perder o lote se não pagar?",
+        "Existe multa se eu não pagar?",
+        "O que acontece se eu desistir depois de arrematar?",
+        "Quais são as penalidades por não pagar?"
+      ],
+      "resposta": "Se o arrematante não honrar os pagamentos corretamente, tanto em relação ao prazo quanto ao valor, poderá sofrer as penalidades previstas nas condições do leilão, incluindo multa e impedimento de participação em outros leilões judiciais. Dependendo do caso, também poderá responder judicialmente ou criminalmente."
+    },
+    {
+      "intent": "violencia_fraude_arrematacao",
+      "perguntas": [
+        "O que acontece em caso de fraude no leilão?",
+        "É crime fraudar uma arrematação?",
+        "Posso impedir outra pessoa de dar lance?",
+        "O que acontece se alguém tentar fraudar o leilão?",
+        "Existe punição para fraude em arrematação?",
+        "É permitido combinar lances?",
+        "Posso oferecer vantagem para outro participante não dar lance?",
+        "O que diz a lei sobre fraude em leilão?"
+      ],
+      "resposta": "A legislação prevê punições para quem impedir, perturbar ou fraudar arrematação judicial, ou tentar afastar concorrente ou licitante por meio de violência, grave ameaça, fraude ou oferecimento de vantagem. O art. 358 do Código Penal prevê pena de detenção ou multa, além da pena correspondente à violência, quando aplicável."
+    },
+    {
+      "intent": "incremento_minimo",
+      "perguntas": [
+        "O que é incremento mínimo?",
+        "O que significa incremento mínimo?",
+        "Qual é o incremento mínimo do lance?",
+        "De quanto precisa ser o próximo lance?",
+        "Quanto posso aumentar o lance?",
+        "Qual o valor mínimo para aumentar o lance?",
+        "Como funciona o incremento?",
+        "Posso dar um lance maior que o incremento?",
+        "O incremento pode mudar durante o leilão?",
+        "Quem define o incremento mínimo?"
+      ],
+      "resposta": "Incremento mínimo é o acréscimo mínimo a ser ofertado sobre o lance anterior. O interessado pode ofertar um valor maior ou respeitar o incremento mínimo ao dar seu lance. O Leiloeiro pode alterar esse valor durante o decorrer do leilão."
+    },
+    {
+      "intent": "o_que_e_lance",
+      "perguntas": [
         "O que é lance?",
         "O que é um lance?",
         "O que significa lance?",
         "O que significa dar um lance?",
-        "O que significa lance no leilão?",
-        "O que é ofertar um lance?",
-        "Qual é o significado de lance?",
-        "O que é um lance de leilão?",
-        "O que significa fazer uma oferta?",
         "O que é uma oferta no leilão?",
-        "O que significa ofertar um valor?",
-        "Como funciona um lance no leilão?"
-    ],
-    "resposta": "Lance é o valor ofertado pelos interessados nos bens apregoados em leilão. O último lance é sempre o mais alto e a disputa ocorre dessa forma. O interessado que ofertar o melhor lance e estiver dentro das condições estipuladas poderá comprar o lote."
-},
-    {
-        "intent": "arrematantes_conjuntos",
-        "perguntas": [
-            "Posso colocar meu nome e o nome de outra pessoa no Auto de Arrematação?",
-            "Posso arrematar junto com outra pessoa?",
-            "É possível colocar dois nomes no Auto de Arrematação?",
-            "Quero que o auto saia no meu nome e no de outra pessoa",
-            "Como faço para incluir outra pessoa no Auto de Arrematação?",
-            "Posso ter outro arrematante comigo?",
-            "Quero comprar o lote junto com outra pessoa",
-            "Como colocar duas pessoas como arrematantes?",
-            "Posso colocar o nome do meu sócio no auto?",
-            "É possível registrar mais de um arrematante?"
-        ],
-        "resposta": "Comumente o Auto de Arrematação é emitido em nome da pessoa que arrematou o bem e está devidamente cadastrada e autorizada pelo sistema. Para que o documento seja emitido em nome de mais de uma pessoa, é necessário solicitar previamente e expressamente ao Leiloeiro por e-mail. A solicitação deve conter os dados das pessoas que deverão constar no Auto, incluindo nome, nacionalidade, naturalidade, profissão, RG, CPF e endereço completo. Se a pessoa for casada, também devem ser informados o regime de bens e os dados do cônjuge."
+        "Qual o significado de lance?",
+        "Como funciona um lance?",
+        "O que significa ofertar um lance?"
+      ],
+      "resposta": "Lance é o valor ofertado pelos interessados nos bens apregoados em leilão. O último lance é sempre o mais alto e a disputa ocorre dessa forma. O interessado que ofertar o melhor lance e estiver dentro das condições estipuladas poderá comprar o lote."
     },
     {
-        "intent": "processo_leilao",
-        "perguntas": [
-            "Qual é o processo do leilão?",
-            "Como funciona um leilão?",
-            "Como funciona o processo do leilão?",
-            "Quais são as etapas do leilão?",
-            "Como começa um leilão?",
-            "Como funciona o leilão online?",
-            "Como acontece a disputa?",
-            "Quando os lances começam?",
-            "Como funciona a abertura dos lances?",
-            "Como funciona o encerramento do leilão?"
-        ],
-        "resposta": "O processo é iniciado com a divulgação do Edital contendo todas as informações do leilão. Os lances são abertos e podem ser ofertados até o encerramento do leilão. Os lances são recebidos em tempo real pelo site, garantindo a disputa entre os participantes."
+      "intent": "arrematantes_multiplo",
+      "perguntas": [
+        "Posso colocar meu nome e de outra pessoa no Auto de Arrematação?",
+        "Posso ter dois arrematantes?",
+        "É possível colocar duas pessoas como arrematantes?",
+        "Quero arrematar junto com outra pessoa",
+        "Posso colocar o nome de outra pessoa no auto?",
+        "Como colocar duas pessoas no Auto de Arrematação?",
+        "Quero que o lote fique no meu nome e no nome de outra pessoa",
+        "Posso comprar o lote com outra pessoa?",
+        "É possível emitir o auto em nome de duas pessoas?"
+      ],
+      "resposta": "Comumente o Auto de Arrematação é emitido em nome da pessoa que arrematou o bem, devidamente cadastrada e autorizada pelo sistema. Para que o documento seja emitido em nome de mais de uma pessoa, é necessário solicitar previamente e expressamente ao Leiloeiro por e-mail. A solicitação deve conter os dados das pessoas que deverão constar no Auto, como nome, nacionalidade, naturalidade, profissão, RG, CPF e endereço completo. Se a pessoa for casada, também deverá informar o regime de bens e os dados do cônjuge."
     },
     {
-        "intent": "quem_pode_participar",
-        "perguntas": [
-            "Qualquer pessoa pode participar de um leilão?",
-            "Quem pode participar do leilão?",
-            "Pessoa física pode participar?",
-            "Pessoa jurídica pode participar?",
-            "Menor de idade pode participar?",
-            "Preciso ter mais de 18 anos para participar?",
-            "Empresas podem participar do leilão?",
-            "Quem pode dar lances?",
-            "Qualquer pessoa pode dar lance?",
-            "Quais são os requisitos para participar?"
-        ],
-        "resposta": "Os leilões são públicos. Podem participar pessoas físicas maiores de 18 anos e pessoas jurídicas, desde que se enquadrem nas regras estabelecidas no Contrato de Adesão do Usuário e nas Condições de Venda e Pagamento do respectivo leilão."
+      "intent": "processo_leilao",
+      "perguntas": [
+        "Qual o processo do leilão?",
+        "Como funciona o leilão?",
+        "Como funciona todo o processo do leilão?",
+        "Quais são as etapas do leilão?",
+        "Como acontece um leilão?",
+        "Como funciona desde o edital até a arrematação?",
+        "Como participar do processo do leilão?",
+        "Como funciona o pregão?",
+        "Como ocorre a disputa dos lotes?"
+      ],
+      "resposta": "O processo é iniciado com a divulgação do Edital, que contém as informações do leilão. Os lances são abertos e podem ser ofertados até o encerramento do leilão. Os lances são recebidos em tempo real pelo site, permitindo a disputa entre os participantes. Após o encerramento e observadas as condições estabelecidas, ocorre a homologação e os procedimentos necessários para a arrematação."
     },
     {
-        "intent": "vender_em_leilao",
-        "perguntas": [
-            "Quem pode vender nos leilões?",
-            "Minha empresa pode vender bens em leilão?",
-            "Como colocar um bem para leilão?",
-            "Quero vender um bem em leilão",
-            "Como minha empresa pode vender através do site?",
-            "Posso anunciar meus bens no leilão?",
-            "Como faço para colocar minha empresa no leilão?",
-            "Empresas podem utilizar o site para vender?",
-            "Como contratar o serviço de leilão?"
-        ],
-        "resposta": "Empresas que tenham interesse em utilizar as ferramentas fornecidas pelo site podem entrar em contato com a central de atendimento para obter informações sobre o procedimento."
+      "intent": "quem_pode_participar",
+      "perguntas": [
+        "Qualquer pessoa pode participar de um leilão?",
+        "Quem pode participar do leilão?",
+        "Pessoa física pode participar?",
+        "Pessoa jurídica pode participar?",
+        "Menor de idade pode participar?",
+        "Preciso ser maior de 18 anos?",
+        "Quem pode dar lance?",
+        "Quem pode comprar em leilão?",
+        "Qualquer pessoa pode dar lance?",
+        "Empresas podem participar do leilão?"
+      ],
+      "resposta": "Os leilões são públicos e podem participar pessoas físicas maiores de 18 anos e pessoas jurídicas, desde que se enquadrem nas regras estabelecidas no Contrato de Adesão do Usuário e nas Condições de Venda e Pagamento do respectivo leilão."
     },
     {
-        "intent": "tipos_bens",
-        "perguntas": [
-            "Que tipos de bens são leiloados?",
-            "O que é possível comprar em um leilão?",
-            "Quais bens são vendidos no leilão?",
-            "Vocês leiloam imóveis?",
-            "Tem carros em leilão?",
-            "Tem máquinas para leilão?",
-            "Quais tipos de produtos são leiloados?",
-            "Posso encontrar equipamentos em leilão?",
-            "Que tipo de imóvel posso encontrar?",
-            "Quais são os tipos de lotes disponíveis?"
-        ],
-        "resposta": "Os bens podem ser imóveis ou móveis em geral, como máquinas, equipamentos, automóveis, computadores e acessórios, eletrodomésticos, entre outros."
+      "intent": "quem_pode_vender",
+      "perguntas": [
+        "Quem pode vender nos leilões?",
+        "Quem pode colocar um bem para leilão?",
+        "Como uma empresa pode vender no leilão?",
+        "Minha empresa pode vender bens em leilão?",
+        "Quero colocar um imóvel em leilão",
+        "Como vender um bem através do site?",
+        "Quem pode anunciar bens no leilão?",
+        "Como faço para vender através do site?"
+      ],
+      "resposta": "Empresas que tenham interesse em utilizar as ferramentas fornecidas pelo site podem entrar em contato com a central de atendimento para obter informações sobre o procedimento."
     },
     {
-        "intent": "duracao_leilao",
-        "perguntas": [
-            "Qual a duração de um leilão?",
-            "Quanto tempo dura um leilão?",
-            "Quando termina o leilão?",
-            "Quanto tempo fica aberto para lances?",
-            "Por quanto tempo posso dar lance?",
-            "Qual o horário de encerramento?",
-            "Quando fecha o leilão?",
-            "Quanto tempo tenho para dar um lance?",
-            "O leilão dura quantos dias?",
-            "Quando os lotes são encerrados?"
-        ],
-        "resposta": "A duração do leilão varia de acordo com a quantidade de lotes a serem apregoados. Por exemplo, leilões de 10 a 20 lotes podem durar em média 30 minutos até que todos os lotes sejam homologados. Normalmente a lista de ativos é disponibilizada no portal com antecedência, permitindo que os interessados analisem os bens e façam a visitação."
+      "intent": "tipos_bens",
+      "perguntas": [
+        "Que tipos de bens são leiloados?",
+        "Quais bens podem ser encontrados no leilão?",
+        "O que vocês leiloam?",
+        "Tem imóveis no leilão?",
+        "Tem carros no leilão?",
+        "Tem máquinas no leilão?",
+        "Quais tipos de lotes existem?",
+        "Que tipo de coisa posso comprar em leilão?",
+        "Vocês leiloam veículos?",
+        "Vocês leiloam imóveis?",
+        "Quais bens são vendidos?"
+      ],
+      "resposta": "Os bens podem ser imóveis ou móveis em geral, como máquinas, equipamentos, automóveis, computadores e acessórios, eletrodomésticos, entre outros."
     },
     {
-        "intent": "o_que_e_lote",
-        "perguntas": [
-            "O que é um lote?",
-            "O que significa lote?",
-            "O que é lote no leilão?",
-            "Como funciona um lote?",
-            "Um lote pode ter mais de um bem?",
-            "Um lote é um imóvel?",
-            "O que pode conter um lote?",
-            "Qual a diferença entre lote e bem?",
-            "Como identificar um lote?"
-        ],
-        "resposta": "Lote é um bem ou conjunto de bens ofertados no leilão."
+      "intent": "duracao_leilao",
+      "perguntas": [
+        "Qual a duração de um leilão?",
+        "Quanto tempo dura o leilão?",
+        "Quando termina o leilão?",
+        "Quanto tempo tenho para dar lance?",
+        "Qual o horário de encerramento?",
+        "Quando fecha o pregão?",
+        "Quanto tempo dura um pregão?",
+        "Por quanto tempo os lotes ficam disponíveis?",
+        "Quando o leilão acaba?"
+      ],
+      "resposta": "A duração do leilão varia de acordo com a quantidade de lotes a serem apregoados. Por exemplo, leilões com 10 ou 20 lotes podem durar em média 30 minutos até que todos os lotes sejam homologados. Normalmente, a lista de ativos é disponibilizada no portal com antecedência, muitas vezes cerca de 30 dias antes do encerramento, permitindo que os interessados conheçam os bens e façam sua análise."
+    },
+
+{
+      "intent": "leilão_judicial",
+      "perguntas": [
+        "O que é um leilão judicial?",
+        "como funciona um leilão judicial?"
+      ],
+      "resposta": "É um leilão ai"
+    },
+
+    {
+      "intent": "o_que_e_lote",
+      "perguntas": [
+        "O que é um lote?",
+        "O que significa lote?",
+        "O que é lote no leilão?",
+        "Um lote pode ter mais de um bem?",
+        "Como funciona um lote?",
+        "O que estou comprando quando dou lance em um lote?"
+      ],
+      "resposta": "Lote é um bem ou conjunto de bens ofertados no leilão."
     },
     {
-        "intent": "como_ofertar_lance",
-        "perguntas": [
-            "Como ofertar um lance?",
-            "Como dar um lance?",
-            "Como faço para dar lance?",
-            "Como posso participar dos lances?",
-            "Como faço um lance pela internet?",
-            "O que preciso fazer para dar um lance?",
-            "Como faço para começar a dar lances?",
-            "Preciso me cadastrar para dar lance?",
-            "Como participar do leilão online?",
-            "Como posso ofertar um lance no site?"
-        ],
-        "resposta": "Para participar é necessário realizar o cadastro do usuário no Portal Êxito Leilões, aceitar as regras presentes no Contrato de Adesão do Usuário e nas Condições de Venda e Pagamento do leilão desejado e enviar os documentos necessários para liberação do cadastro. Após a aprovação, o usuário estará apto a participar dos lances via web."
+      "intent": "como_ofertar_lance",
+      "perguntas": [
+        "Como ofertar um lance?",
+        "Como faço um lance?",
+        "Como posso dar um lance?",
+        "Quero dar um lance",
+        "Como faço para dar um lance?",
+        "Como faço uma oferta?",
+        "Como dar lance em um lote?",
+        "Como faço para dar um lance no leilão?",
+        "Onde posso ofertar um lance?",
+        "Como participar dos lances?",
+        "Como começo a dar lances?",
+        "Como faço para participar da disputa?",
+        "Como dou meu primeiro lance?"
+      ],
+      "resposta": "A participação depende inicialmente do cadastro do usuário no Portal Êxito Leilões. Após o cadastro, o usuário deve aceitar as regras presentes no Contrato de Adesão do Usuário e nas Condições de Venda e Pagamento do leilão em que deseja participar e enviar os documentos necessários para que o cadastro seja liberado. Depois disso, estará apto a participar dos lances via web."
     },
     {
-        "intent": "lance_antes_apregoamento",
-        "perguntas": [
-            "É possível ofertar lances antes do apregoamento?",
-            "Posso dar lance antes do leilão começar?",
-            "Posso dar lance antecipado?",
-            "Consigo ofertar lance antes da abertura?",
-            "Posso deixar meu lance antes do horário do leilão?",
-            "Quando posso começar a dar lances?",
-            "Posso dar lance antes do pregão?",
-            "Os lances ficam disponíveis antes do apregoamento?"
-        ],
-        "resposta": "Sim. Os lances podem ser registrados no sistema a partir da divulgação do leilão no portal, aproximadamente 30 dias antes do apregoamento dos lotes."
+      "intent": "lance_antes_apregoamento",
+      "perguntas": [
+        "É possível ofertar lances antes do apregoamento?",
+        "Posso dar lance antes do leilão começar?",
+        "Posso dar lance antecipado?",
+        "Posso ofertar lance antes da data do leilão?",
+        "Quando posso começar a dar lances?",
+        "Posso dar lance antes do lote ser apregoado?",
+        "Os lances ficam disponíveis antes do leilão?",
+        "Posso deixar meu lance antecipadamente?"
+      ],
+      "resposta": "Sim. Os lances podem ser registrados no sistema a partir da divulgação do leilão no portal, aproximadamente 30 dias antes do apregoamento dos lotes, quando essa condição estiver disponível para o respectivo leilão."
     },
     {
-        "intent": "lance_inicial",
-        "perguntas": [
-            "O que é lance inicial?",
-            "O que significa lance inicial?",
-            "Qual é o lance inicial?",
-            "Como é definido o lance inicial?",
-            "O lance inicial é o valor mínimo?",
-            "Qual a diferença entre lance inicial e valor mínimo?",
-            "Quem define o lance inicial?",
-            "O que significa valor inicial do leilão?"
-        ],
-        "resposta": "O lance inicial é o valor estipulado pelo Juízo Responsável para dar início ao leilão dos bens apregoados. Ele não é necessariamente o mesmo valor mínimo de venda do lote."
+      "intent": "lance_inicial",
+      "perguntas": [
+        "O que é lance inicial?",
+        "Qual é o lance inicial?",
+        "O que significa lance inicial?",
+        "Como é definido o lance inicial?",
+        "O lance inicial é o valor mínimo?",
+        "O valor inicial é igual ao valor mínimo?",
+        "Qual a diferença entre lance inicial e valor mínimo?"
+      ],
+      "resposta": "O lance inicial é o valor estipulado pelo Juízo responsável para dar início ao leilão dos bens apregoados. O lance inicial não é necessariamente o mesmo que o valor mínimo de venda do lote."
     },
     {
-        "intent": "lance_condicional",
-        "perguntas": [
-            "O que é lance condicional?",
-            "O que significa lance condicional?",
-            "Como funciona o lance condicional?",
-            "Meu lance ficou condicional, o que significa?",
-            "O que acontece quando o lance é condicional?",
-            "Por que meu lance foi recebido condicionalmente?",
-            "O lance abaixo do mínimo pode ser aceito?",
-            "Quem aprova o lance condicional?",
-            "Se meu lance for condicional eu ganhei o lote?",
-            "Quando um lance é considerado condicional?"
-        ],
-        "resposta": "O lance condicional é submetido à análise do Juízo Responsável porque possui valor inferior ao mínimo de venda do bem ofertado. Se for aprovado, o arrematante deverá pagar o valor ofertado dentro do prazo estabelecido. O arrematante será informado pelo Leiloeiro sobre a aprovação ou não do lance."
+      "intent": "lance_condicional",
+      "perguntas": [
+        "O que é lance condicional?",
+        "O que significa lance condicional?",
+        "Como funciona um lance condicional?",
+        "Meu lance ficou condicional, o que significa?",
+        "O que acontece quando o lance é condicional?",
+        "Por que meu lance foi recebido condicionalmente?",
+        "Lance abaixo do mínimo é condicional?",
+        "Meu lance foi menor que o mínimo, e agora?",
+        "Quem aprova o lance condicional?"
+      ],
+      "resposta": "O lance condicional é submetido à análise do Juízo responsável porque possui valor inferior ao mínimo de venda do bem ofertado. Se aprovado, o arrematante deverá pagar o valor ofertado dentro do prazo estabelecido. Se não for aceito, o lance será desconsiderado."
     },
     {
-        "intent": "lance_recebido_condicionalmente",
-        "perguntas": [
-            "O que fazer se o lance for recebido condicionalmente?",
-            "Meu lance foi recebido condicionalmente, e agora?",
-            "O que acontece depois de um lance condicional?",
-            "Preciso pagar imediatamente se o lance for condicional?",
-            "Quem analisa um lance condicional?",
-            "Quanto tempo demora para saber se aceitaram o lance condicional?",
-            "O que acontece se o juiz aceitar meu lance?",
-            "E se o lance condicional não for aceito?"
-        ],
-        "resposta": "O lance recebido condicionalmente será analisado pelo Juízo Responsável. Se aprovado, o arrematante deverá pagar o valor ofertado dentro do prazo estabelecido. O Leiloeiro informará o resultado. Caso não seja aceito, o lance será desconsiderado."
-    },
-    {
-        "intent": "indicacao_leiloeiro",
-        "perguntas": [
-            "Quem indica o leiloeiro?",
-            "Quem escolhe o leiloeiro?",
-            "Quem pode indicar o leiloeiro?",
-            "O advogado pode indicar o leiloeiro?",
-            "O procurador pode indicar o leiloeiro?",
-            "O juiz pode escolher o leiloeiro?",
-            "Como é escolhido o leiloeiro?",
-            "Quem é responsável pela indicação do leiloeiro?"
-        ],
-        "resposta": "A indicação do leiloeiro deve vir do advogado do exequente ou do Procurador, de acordo com o CPC. O exequente pode informar como deseja conduzir o processo. O Magistrado também pode indicar o Leiloeiro."
-    },
-    {
-        "intent": "como_indicar_leiloeiro",
-        "perguntas": [
-            "Como indicar um leiloeiro?",
-            "Quero indicar um leiloeiro, como faço?",
-            "Como um advogado pode indicar o leiloeiro?",
-            "Como o procurador pode indicar um leiloeiro?",
-            "Quero indicar um processo para leilão",
-            "Como indicar processos em fase de execução?",
-            "Sou advogado e quero indicar um leiloeiro"
-        ],
-        "resposta": "Advogados ou Procuradores interessados em indicar processos em fase de execução podem entrar em contato através dos canais disponibilizados no site."
-    },
-    {
-    "intent": "lance_automatico",
-    "perguntas": [
+      "intent": "lance_automatico",
+      "perguntas": [
         "Como funciona o lance automático?",
         "O que é lance automático?",
-        "Posso deixar um lance automático?",
+        "Como ativar o lance automático?",
         "Como configurar um lance automático?",
+        "Posso deixar um lance automático?",
         "O sistema pode dar lance sozinho?",
-        "Como funciona o lance automático do site?",
+        "O sistema pode dar lance por mim?",
+        "Como programar um lance automático?",
         "Posso definir um valor máximo para os lances?",
-        "O sistema aumenta meu lance automaticamente?",
         "Preciso ficar acompanhando o leilão para dar lance?",
         "Como deixar o sistema dando lances por mim?",
         "Quero usar o lance automático",
-        "Como ativar o lance automático?",
-        "Onde configuro o lance automático?",
-        "Como programar lances automáticos?",
-        "O site pode fazer lances automaticamente?",
-        "Tem como o sistema dar lance por mim?",
-        "Como faço para configurar meu lance automático?"
-    ],
-    "resposta": "O lance automático permite programar um incremento fixo e um valor máximo de ofertas. Quando outro participante oferece um lance maior, o sistema gera automaticamente outro lance acrescido do incremento definido, respeitando o limite máximo determinado pelo usuário. Os lances ficam registrados no histórico de disputa pelo lote."
-},
-
-    {
-        "intent": "impedimentos_participacao",
-        "perguntas": [
-            "Existem impedimentos para participar do leilão?",
-            "Quem não pode participar do leilão?",
-            "Quem está impedido de participar?",
-            "Existe alguma restrição para dar lance?",
-            "Quais pessoas não podem comprar em leilão?",
-            "Advogado pode participar do leilão?",
-            "O leiloeiro pode comprar o próprio lote?",
-            "Servidor público pode participar?",
-            "Juiz pode participar do leilão?",
-            "Quais são os impedimentos previstos no CPC?"
-        ],
-        "resposta": "Cada leilão possui suas próprias regras e impedimentos. De forma geral, podem existir impedimentos para tutores, curadores, testamenteiros, administradores, liquidantes, mandatários, juízes, membros do Ministério Público e da Defensoria Pública, escrivães, chefes de secretaria, servidores e auxiliares da justiça, servidores públicos em determinadas situações, leiloeiros e seus prepostos e advogados de qualquer das partes, conforme as hipóteses previstas no Art. 890 do CPC."
+        "Posso configurar um limite para o lance automático?",
+        "Como o sistema aumenta meu lance automaticamente?"
+      ],
+      "resposta": "O lance automático é uma opção oferecida pelas ferramentas do portal. O participante pode programar um incremento fixo e definir um valor máximo de ofertas. Caso outro participante ofereça um lance maior, o sistema poderá gerar automaticamente outro lance acrescido do incremento previamente definido, respeitando o limite máximo determinado pelo usuário. Os lances ficam registrados no histórico de disputa pelo lote."
     },
     {
-        "intent": "artigo_890_cpc",
-        "perguntas": [
-            "O que diz o artigo 890 do CPC?",
-            "Quem é impedido pelo artigo 890?",
-            "Quais são os impedimentos do artigo 890 do CPC?",
-            "O artigo 890 fala sobre quem pode participar?",
-            "Quais pessoas não podem arrematar segundo o CPC?",
-            "Quem não pode comprar bens em leilão judicial?"
-        ],
-        "resposta": "O Art. 890 do Código de Processo Civil estabelece hipóteses de pessoas que não podem adquirir bens em determinadas alienações judiciais, incluindo algumas situações envolvendo tutores, curadores, mandatários, membros do Judiciário, Ministério Público, Defensoria Pública, servidores, leiloeiros, prepostos e advogados das partes."
+      "intent": "indicacao_leiloeiro",
+      "perguntas": [
+        "Quem indica o leiloeiro?",
+        "Quem escolhe o leiloeiro?",
+        "Como o leiloeiro é escolhido?",
+        "Quem pode indicar um leiloeiro?",
+        "O advogado pode indicar o leiloeiro?",
+        "O juiz pode indicar o leiloeiro?",
+        "Quem nomeia o leiloeiro?"
+      ],
+      "resposta": "A indicação do Leiloeiro pode partir do advogado do exequente ou do Procurador, de acordo com as regras aplicáveis do CPC. O exequente pode informar como deseja conduzir o processo. O Magistrado também pode indicar o Leiloeiro, conforme as circunstâncias do processo."
     },
     {
-        "intent": "cadastro_portal",
-        "perguntas": [
-            "Como faço meu cadastro?",
-            "Como me cadastrar para participar do leilão?",
-            "Preciso criar uma conta?",
-            "Como faço cadastro no portal?",
-            "Quero me cadastrar para dar lance",
-            "Como criar meu cadastro?",
-            "O que preciso para me cadastrar?",
-            "Como liberar meu cadastro?",
-            "Quais documentos preciso enviar para cadastro?"
-        ],
-        "resposta": "Para participar dos lances é necessário realizar o cadastro no Portal Êxito Leilões, aceitar o Contrato de Adesão do Usuário e as Condições de Venda e Pagamento do leilão e enviar os documentos solicitados para que o cadastro seja analisado e liberado."
+      "intent": "indicar_leiloeiro",
+      "perguntas": [
+        "Como indicar o leiloeiro?",
+        "Como faço para indicar um leiloeiro?",
+        "Quero indicar a Daniel Garcia Leilões",
+        "Como advogado posso indicar o leiloeiro?",
+        "Como procurador posso indicar um leiloeiro?",
+        "Quero indicar um processo para leilão",
+        "Como indicar um processo para leilão?"
+      ],
+      "resposta": "Advogados ou Procuradores interessados em indicar processos em fase de execução podem entrar em contato através dos canais disponibilizados no site para obter informações sobre o procedimento."
     },
     {
-        "intent": "edital",
-        "perguntas": [
-            "Onde encontro o edital?",
-            "Como consultar o edital?",
-            "Onde estão as informações do leilão?",
-            "O que encontro no edital?",
-            "Onde vejo as regras do lote?",
-            "Quero ler o edital do leilão",
-            "Onde vejo as condições do leilão?",
-            "O edital informa os impostos?",
-            "O edital informa as condições de pagamento?"
-        ],
-        "resposta": "O Edital contém as informações e condições do leilão. É importante consultar o respectivo Edital e as Condições de Venda e Pagamento antes de participar ou ofertar um lance."
-    },
-    {
-        "intent": "newsletter",
-        "perguntas": [
-            "Como receber novidades dos leilões?",
-            "Como receber avisos de novos leilões?",
-            "Tem newsletter?",
-            "Como me cadastrar na newsletter?",
-            "Quero receber os leilões por email",
-            "Vocês enviam novidades por email?",
-            "Como receber informações dos próximos leilões?"
-        ],
-        "resposta": "Para receber novidades, informações e avisos sobre os leilões, o interessado pode realizar o cadastro na newsletter através do portal."
-    },
-    {
-        "intent": "duvida_atendimento",
-        "perguntas": [
-            "Como entro em contato com o atendimento?",
-            "Preciso falar com alguém",
-            "Como falar com o atendimento?",
-            "Quero tirar uma dúvida",
-            "Onde consigo atendimento?",
-            "Como entrar em contato com vocês?",
-            "Preciso de ajuda com um leilão",
-            "Quem pode me orientar?"
-        ],
-        "resposta": "Para dúvidas específicas sobre um leilão, lote, visitação ou procedimentos, o interessado deve utilizar os canais de atendimento disponibilizados no site e consultar o respectivo Edital e as Condições de Venda e Pagamento."
+      "intent": "impedimentos_participacao",
+      "perguntas": [
+        "Existem impedimentos para participar?",
+        "Quem não pode participar do leilão?",
+        "Quem está impedido de dar lance?",
+        "Existem pessoas que não podem arrematar?",
+        "Quem não pode comprar no leilão?",
+        "Quais são os impedimentos para participar?",
+        "Servidor público pode participar?",
+        "Advogado pode arrematar?",
+        "Leiloeiro pode participar?",
+        "O juiz pode comprar um bem do leilão?",
+        "Quem está impedido segundo o artigo 890 do CPC?"
+      ],
+      "resposta": "Cada leilão possui suas próprias regras e impedimentos, conforme o tipo de execução ou processo. De forma geral, existem impedimentos previstos no art. 890 do CPC, incluindo determinadas situações envolvendo tutores, curadores, mandatários, magistrados, membros do Ministério Público e Defensoria Pública, servidores públicos, leiloeiros, seus prepostos e advogados das partes, entre outros casos previstos em lei. É importante verificar o Edital e a legislação aplicável ao leilão específico."
     }
-]
+  ],
+  "desambiguacoes": [
+    {
+      "intents": [
+        "como_ofertar_lance",
+        "lance_automatico"
+      ],
+      "pergunta": "Encontrei duas possibilidades. Você gostaria de saber como efetuar um lance ou como funciona o lance automático?",
+      "opcoes": [
+        {
+          "texto": "Como efetuar um lance",
+          "intent": "como_ofertar_lance"
+        },
+        {
+          "texto": "Como funciona o lance automático",
+          "intent": "lance_automatico"
+        }
+      ]
+    },
+    {
+      "intents": [
+        "o_que_e_lance",
+        "como_ofertar_lance"
+      ],
+      "pergunta": "Você gostaria de saber o que é um lance ou como efetuar um lance?",
+      "opcoes": [
+        {
+          "texto": "O que é um lance",
+          "intent": "o_que_e_lance"
+        },
+        {
+          "texto": "Como efetuar um lance",
+          "intent": "como_ofertar_lance"
+        }
+      ]
+    },
+    {
+      "intents": [
+        "lance_inicial",
+        "valor_minimo_venda"
+      ],
+      "pergunta": "Você gostaria de saber o que é o lance inicial ou como funciona o valor mínimo de venda?",
+      "opcoes": [
+        {
+          "texto": "O que é lance inicial",
+          "intent": "lance_inicial"
+        },
+        {
+          "texto": "O que é valor mínimo de venda",
+          "intent": "valor_minimo_venda"
+        }
+      ]
+    },
+    {
+      "intents": [
+        "lance_condicional",
+        "valor_minimo_venda"
+      ],
+      "pergunta": "Você quer saber o que é um lance condicional ou o que acontece quando o valor mínimo não é atingido?",
+      "opcoes": [
+        {
+          "texto": "O que é lance condicional",
+          "intent": "lance_condicional"
+        },
+        {
+          "texto": "O que é valor mínimo de venda",
+          "intent": "valor_minimo_venda"
+        }
+      ]
+    },
+    {
+      "intents": [
+        "lance_automatico",
+        "incremento_minimo"
+      ],
+      "pergunta": "Você gostaria de saber como funciona o lance automático ou o que é o incremento mínimo?",
+      "opcoes": [
+        {
+          "texto": "Como funciona o lance automático",
+          "intent": "lance_automatico"
+        },
+        {
+          "texto": "O que é incremento mínimo",
+          "intent": "incremento_minimo"
+        }
+      ]
+    },
+    {
+      "intents": [
+        "parcelamento",
+        "condicoes_venda_pagamento"
+      ],
+      "pergunta": "Você gostaria de saber se o lote pode ser parcelado ou conhecer as condições gerais de pagamento?",
+      "opcoes": [
+        {
+          "texto": "Posso parcelar o pagamento?",
+          "intent": "parcelamento"
+        },
+        {
+          "texto": "Quais são as condições de pagamento?",
+          "intent": "condicoes_venda_pagamento"
+        }
+      ]
+    },
+    {
+      "intents": [
+        "entrega_bem",
+        "visitar_bem"
+      ],
+      "pergunta": "Você quer saber como visitar o bem antes da arrematação ou como funciona a entrega depois da arrematação?",
+      "opcoes": [
+        {
+          "texto": "Como visitar o bem",
+          "intent": "visitar_bem"
+        },
+        {
+          "texto": "Como funciona a entrega do bem",
+          "intent": "entrega_bem"
+        }
+      ]
+    },
+    {
+      "intents": [
+        "comissao_leiloeiro",
+        "condicoes_venda_pagamento"
+      ],
+      "pergunta": "Você quer saber especificamente sobre a comissão do leiloeiro ou sobre as condições gerais de pagamento?",
+      "opcoes": [
+        {
+          "texto": "Qual é a comissão do leiloeiro?",
+          "intent": "comissao_leiloeiro"
+        },
+        {
+          "texto": "Quais são as condições de pagamento?",
+          "intent": "condicoes_venda_pagamento"
+        }
+      ]
+    },
+    {
+      "intents": [
+        "impostos_multas",
+        "condicoes_venda_pagamento"
+      ],
+      "pergunta": "Você gostaria de saber sobre impostos e multas pendentes ou sobre as condições gerais de pagamento?",
+      "opcoes": [
+        {
+          "texto": "Impostos e multas pendentes",
+          "intent": "impostos_multas"
+        },
+        {
+          "texto": "Condições de pagamento",
+          "intent": "condicoes_venda_pagamento"
+        }
+      ]
+    },
+    {
+      "intents": [
+        "quem_pode_participar",
+        "impedimentos_participacao"
+      ],
+      "pergunta": "Você gostaria de saber quem pode participar do leilão ou quais pessoas possuem impedimentos?",
+      "opcoes": [
+        {
+          "texto": "Quem pode participar?",
+          "intent": "quem_pode_participar"
+        },
+        {
+          "texto": "Quem não pode participar?",
+          "intent": "impedimentos_participacao"
+        }
+      ]
+    },
+    {
+      "intents": [
+        "indicacao_leiloeiro",
+        "indicar_leiloeiro"
+      ],
+      "pergunta": "Você quer saber quem pode indicar o leiloeiro ou como fazer uma indicação?",
+      "opcoes": [
+        {
+          "texto": "Quem indica o leiloeiro?",
+          "intent": "indicacao_leiloeiro"
+        },
+        {
+          "texto": "Como indicar o leiloeiro?",
+          "intent": "indicar_leiloeiro"
+        }
+      ]
+    },
+    {
+      "intents": [
+        "lance_automatico",
+        "lance_antes_apregoamento"
+      ],
+      "pergunta": "Você quer saber sobre lances automáticos ou sobre a possibilidade de ofertar um lance antes do apregoamento?",
+      "opcoes": [
+        {
+          "texto": "Lance automático",
+          "intent": "lance_automatico"
+        },
+        {
+          "texto": "Lance antes do apregoamento",
+          "intent": "lance_antes_apregoamento"
+        }
+      ]
+    },
+    {
+  "intents": [
+    {
+      "intent": "falar_com_atendente",
+      "perguntas": [
+        "Quero falar com um atendente",
+        "Preciso de suporte humano",
+        "Como falo com uma pessoa?",
+        "Qual o telefone de contato?",
+        "Qual o WhatsApp do suporte?",
+        "Quero atendimento pelo WhatsApp",
+        "Tem algum número de telefone?",
+        "Como entrar em contato com vocês?",
+        "Preciso do contato de suporte",
+        "Atendente",
+        "Suporte humano",
+        "Falar com operador"
+      ],
+      "resposta": "Você pode falar diretamente com nossa equipe de suporte pelo WhatsApp no número (00) 00000-0000 ou pelo e-mail suporte@leiloes.com.br. Nosso atendimento funciona de segunda a sexta-feira, das 08h às 18h."
+    },
+    {
+      "intent": "formas_pagamento",
+      "perguntas": [
+        "Quais são as formas de pagamento aceitas?",
+        "Aceita cartão de crédito?",
+        "Posso pagar com PIX?",
+        "Dá para pagar no boleto bancário?",
+        "Como faço o pagamento da arrematação?",
+        "Posso pagar com cheque?",
+        "Aceita transferência bancária?",
+        "Quais os meios de pagamento?",
+        "Como pago o lote arrematado?",
+        "Quais bancos vocês aceitam?"
+      ],
+      "resposta": "Os pagamentos de arrematação e comissão do leiloeiro são realizados preferencialmente via PIX ou transferência bancária (TED) para a conta oficial indicada no Edital. Cartão de crédito, boleto ou cheque dependem das regras do leilão específico e da autorização prévia no edital."
+    },
+    {
+      "intent": "prazo_pagamento",
+      "perguntas": [
+        "Qual o prazo para pagar o bem arrematado?",
+        "Quanto tempo tenho para fazer o PIX?",
+        "Até quando posso pagar?",
+        "Qual o prazo de pagamento da comissão?",
+        "O que acontece se atrasar o pagamento?",
+        "Tenho quantos dias para pagar?",
+        "Qual a data limite para pagamento?"
+      ],
+      "resposta": "O prazo de pagamento varia conforme as regras do Edital, mas geralmente a quitação do bem e da comissão do leiloeiro deve ser efetuada em até 24 a 48 horas úteis após o encerramento do leilão."
+    },
+    {
+      "intent": "suporte_tecnico_site",
+      "perguntas": [
+        "O site está dando erro",
+        "Não consigo dar lance, a página travou",
+        "Erro na hora de enviar documento",
+        "O botão de lance não funciona",
+        "A página não está carregando",
+        "Problema de conexão no site",
+        "Não consigo fazer login",
+        "Erro no cadastro",
+        "O site está fora do ar?"
+      ],
+      "resposta": "Se estiver enfrentando problemas técnicos, tente atualizar a página (Ctrl + F5) ou utilizar outro navegador (recomendamos o Google Chrome). Se o problema persistir, limpe os cookies do navegador ou entre em contato imediatamente com o nosso suporte técnico."
+    },
+    {
+      "intent": "alteracao_dados_cadastrais",
+      "perguntas": [
+        "Como mudo meu endereço?",
+        "Como alterar meu e-mail cadastrado?",
+        "Preciso trocar meu número de telefone",
+        "Como atualizar meus dados pessoais?",
+        "Onde mudo minha senha?",
+        "Quero alterar meu telefone",
+        "Como atualizar meu cadastro?"
+      ],
+      "resposta": "Você pode atualizar seus dados cadastrais acessando sua conta no site, no menu 'Minha Conta' > 'Meus Dados'. Para alteração de documentos principais como CPF/CNPJ ou nome, é necessário enviar uma solicitação ao suporte com o documento comprobatório."
+    },
+    {
+      "intent": "prorrogacao_cronometro_lance",
+      "perguntas": [
+        "Como funciona a prorrogação do tempo no final do leilão?",
+        "Por que o cronômetro voltou para 3 minutos?",
+        "O tempo do leilão aumentou?",
+        "O que é o tempo extra no final do lote?",
+        "Por que o leilão não encerrou no horário?",
+        "Como funciona o tempo do reloginho?"
+      ],
+      "resposta": "Caso um lance seja registrado nos minutos finais do encerramento do lote (geralmente nos últimos 3 minutos), o cronômetro é automaticamente prorrogado por mais alguns minutos. Esse processo se repete a cada novo lance para garantir igualdade de disputa entre os participantes."
+    },
+    {
+      "intent": "evitar_golpes_leilao_falso",
+      "perguntas": [
+        "Como sei se este site de leilão é verdadeiro?",
+        "Como não cair em golpe de leilão falso?",
+        "Como confirmar o registro do leiloeiro?",
+        "O leilão é oficial e confiável?",
+        "Como sei que o site não é falso?",
+        "Existe site falso de leilão?"
+      ],
+      "resposta": "Para sua segurança: 1) Verifique se o endereço do site termina com '.com.br'; 2) Confirme se o leiloeiro está matriculado na Junta Comercial do seu Estado; 3) Nunca faça pagamentos via PIX ou conta bancária em nome de terceiros/pessoas físicas não identificadas no edital."
+    },
+    {
+      "intent": "comprovante_pagamento",
+      "perguntas": [
+        "Onde envio o comprovante de pagamento?",
+        "Como enviar o comprovante do PIX?",
+        "Para onde mando o comprovante da comissão?",
+        "Onde anexo o comprovante da transferência?",
+        "Como confirmar que paguei?"
+      ],
+      "resposta": "O comprovante de pagamento deve ser anexado na sua área logada no site em 'Minha Conta' > 'Meus Arremates', ou enviado diretamente para o e-mail informado na notificação de arrematação."
+    },
+    {
+      "intent": "nota_fiscal_recibo",
+      "perguntas": [
+        "Recebo Nota Fiscal do bem arrematado?",
+        "O leiloeiro emite nota fiscal?",
+        "Como recebo o recibo da comissão do leiloeiro?",
+        "Qual o documento fiscal da arrematação?",
+        "Vocês dão recibo do pagamento?"
+      ],
+      "resposta": "O leiloeiro oficial emite o Recibo de Comissão referente aos seus serviços. Para os bens arrematados em leilão judicial, a comprovação de propriedade é feita via Carta de Arrematação expedida pelo juízo. Em leilões extrajudiciais ou de frotas, o comitente vendedor emite a Nota Fiscal do bem."
+    },
+    {
+      "intent": "cancelamento_conta",
+      "perguntas": [
+        "Como excluo meu cadastro?",
+        "Quero cancelar minha conta no site",
+        "Como apagar meus dados do site?",
+        "Quero desativar meu cadastro",
+        "Como excluir a conta?"
+      ],
+      "resposta": "Para solicitar a exclusão ou desativação da sua conta, envie um e-mail para o suporte solicitando a remoção dos seus dados. A solicitação será processada de acordo com as diretrizes da LGPD e prazos de retenção legal."
+    }
+  ]
+}
+  
+    
+    
+  ]
+}
